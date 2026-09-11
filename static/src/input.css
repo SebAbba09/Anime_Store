@@ -1,0 +1,309 @@
+@import "tailwindcss";
+
+/*
+|--------------------------------------------------------------------------
+| Anime Store Dakar - Design System
+|--------------------------------------------------------------------------
+*/
+
+@theme {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Couleurs principales
+    |--------------------------------------------------------------------------
+    */
+
+    --color-brand: #6491A6;
+    --color-brand-dark: #1F2235;
+    --color-brand-soft: #D2DDF1;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Couleurs fonctionnelles
+    |--------------------------------------------------------------------------
+    */
+
+    --color-success: #2E8B57;
+    --color-warning: #D97706;
+    --color-danger: #DC2626;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Typographie
+    |--------------------------------------------------------------------------
+    */
+
+    --font-display: "Dancing Script", cursive;
+    --font-body: "Poppins", sans-serif;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Ombres personnalisées
+    |--------------------------------------------------------------------------
+    */
+
+    --shadow-brand: 0 10px 30px rgba(31, 34, 53, 0.18);
+    --shadow-brand-hover: 0 15px 35px rgba(31, 34, 53, 0.25);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Dark mode
+|--------------------------------------------------------------------------
+*/
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+|--------------------------------------------------------------------------
+| Styles globaux
+|--------------------------------------------------------------------------
+*/
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    background-color: var(--color-brand-soft);
+    color: var(--color-brand-dark);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Sélection de texte
+|--------------------------------------------------------------------------
+*/
+
+::selection {
+    background-color: var(--color-brand-dark);
+    color: white;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Images
+|--------------------------------------------------------------------------
+*/
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Liens
+|--------------------------------------------------------------------------
+*/
+
+a {
+    text-decoration: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Focus clavier
+|--------------------------------------------------------------------------
+*/
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(31, 34, 53, 0.45);
+    outline-offset: 3px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Composants réutilisables
+|--------------------------------------------------------------------------
+*/
+
+@layer components {
+    .container-page {
+        @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+    }
+
+    .section-page {
+        @apply py-12 sm:py-16 lg:py-20;
+    }
+
+    .section-title {
+        @apply font-display text-4xl font-bold leading-none text-brand-dark dark:text-white sm:text-5xl;
+    }
+
+    .section-subtitle {
+        @apply mt-3 max-w-2xl text-base leading-relaxed text-brand-dark/75 dark:text-white/70 sm:text-lg;
+    }
+
+    .btn {
+        @apply inline-flex items-center justify-center rounded-full px-8 py-3.5 text-sm font-semibold transition duration-300 sm:text-base;
+    }
+
+    .btn-primary {
+        @apply bg-brand-dark text-white shadow-brand hover:-translate-y-1 hover:shadow-brand-hover dark:bg-white dark:text-brand-dark;
+    }
+
+    .btn-secondary {
+        @apply border-2 border-brand-dark text-brand-dark hover:bg-brand-dark hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-brand-dark;
+    }
+
+    .btn-light {
+        @apply bg-white text-brand-dark shadow-brand hover:-translate-y-1 hover:shadow-brand-hover dark:bg-brand-soft dark:text-brand-dark;
+    }
+
+    .card {
+        @apply rounded-lg bg-white p-5 shadow-brand transition duration-300 hover:-translate-y-1 hover:shadow-brand-hover dark:bg-white/10 dark:text-white;
+    }
+
+    .card-soft {
+        @apply rounded-lg border border-white/70 bg-brand-soft/70 p-5 shadow-brand dark:border-white/15 dark:bg-white/5 dark:text-white;
+    }
+
+    .badge {
+        @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide;
+    }
+
+    .badge-primary {
+        @apply bg-brand-dark text-white dark:bg-white dark:text-brand-dark;
+    }
+
+    .badge-soft {
+        @apply bg-brand-soft text-brand-dark dark:bg-white/10 dark:text-white;
+    }
+
+    .form-label {
+        @apply mb-2 block text-sm font-semibold text-brand-dark dark:text-white;
+    }
+
+    .form-field {
+        @apply w-full rounded-lg border border-brand-dark/20 bg-white px-4 py-3 text-sm text-brand-dark transition duration-300 placeholder:text-brand-dark/45 focus:border-brand-dark focus:ring-2 focus:ring-brand-dark/20 focus:outline-none dark:border-white/15 dark:bg-white/10 dark:text-white dark:placeholder:text-white/45 dark:focus:border-white dark:focus:ring-white/20;
+    }
+
+    .nav-link {
+        @apply text-sm font-semibold text-brand-dark/75 transition duration-300 hover:text-brand-dark dark:text-white/75 dark:hover:text-white;
+    }
+
+    .nav-link-active {
+        @apply text-brand-dark dark:text-white;
+    }
+
+    .icon-button {
+        @apply inline-flex h-11 w-11 items-center justify-center rounded-full border border-brand-dark/15 bg-white/80 text-brand-dark transition duration-300 hover:bg-brand-dark hover:text-white dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white dark:hover:text-brand-dark;
+    }
+
+    .eyebrow {
+        @apply text-xs font-bold uppercase tracking-[0.28em] text-brand-dark/55 dark:text-white/50;
+    }
+
+    .hero-shell {
+        @apply overflow-hidden bg-brand text-brand-dark transition-colors duration-300 dark:bg-brand-dark dark:text-white;
+    }
+
+    .commerce-panel {
+        @apply rounded-lg border border-white/60 bg-white/70 p-4 shadow-brand backdrop-blur transition duration-300 dark:border-white/10 dark:bg-white/10;
+    }
+
+    .media-frame {
+        @apply overflow-hidden rounded-lg border border-white/60 bg-brand-soft shadow-brand dark:border-white/10 dark:bg-white/10;
+    }
+
+    .product-card {
+        @apply rounded-lg border border-brand-dark/10 bg-white p-3 shadow-brand transition duration-300 hover:-translate-y-1 hover:shadow-brand-hover dark:border-white/10 dark:bg-white/10;
+    }
+
+    .stat-card {
+        @apply rounded-lg border border-white/70 bg-white/55 p-5 backdrop-blur dark:border-white/10 dark:bg-white/10;
+    }
+
+    .scroll-stroke-section {
+        @apply relative isolate overflow-hidden;
+    }
+
+    .parallax-product-section {
+        @apply relative h-[175vh] overflow-clip bg-white text-brand-dark dark:bg-brand-dark dark:text-white;
+    }
+
+    .parallax-product-sticky {
+        @apply sticky top-20 flex h-[calc(100vh-5rem)] items-center overflow-hidden;
+    }
+
+    .parallax-product-gallery {
+        @apply flex h-[135vh] w-max min-w-full gap-4 px-4 py-6 sm:gap-5 sm:px-6 lg:px-8;
+    }
+
+    .parallax-product-column {
+        @apply flex min-w-44 flex-1 flex-col gap-4 sm:min-w-56 sm:gap-5 lg:min-w-64;
+        transform: translate3d(0, var(--parallax-y, 0px), 0);
+        will-change: transform;
+    }
+
+    .parallax-product-tile {
+        @apply flex min-h-64 flex-col justify-between overflow-hidden rounded-lg border border-brand-dark/10 bg-brand-soft p-4 shadow-brand dark:border-white/10 dark:bg-white/10;
+    }
+
+    .parallax-product-visual {
+        @apply flex aspect-[4/5] items-center justify-center rounded-lg bg-white/70 text-brand-dark dark:bg-white/10 dark:text-white;
+    }
+}
+
+.parallax-product-column:nth-child(1) {
+    margin-top: -22vh;
+}
+
+.parallax-product-column:nth-child(2) {
+    margin-top: -52vh;
+}
+
+.parallax-product-column:nth-child(3) {
+    margin-top: -30vh;
+}
+
+.parallax-product-column:nth-child(4) {
+    margin-top: -44vh;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Effet de trait au scroll
+|--------------------------------------------------------------------------
+*/
+
+.scroll-stroke {
+    pointer-events: none;
+    position: absolute;
+    inset: -8rem auto auto 50%;
+    z-index: -1;
+    width: min(64rem, 150vw);
+    height: auto;
+    transform: translateX(-50%);
+    opacity: 0.42;
+}
+
+.scroll-stroke path {
+    fill: none;
+    stroke: rgba(31, 34, 53, 0.35);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 16;
+    transition: stroke-dashoffset 120ms linear;
+}
+
+.dark .scroll-stroke path {
+    stroke: rgba(210, 221, 241, 0.24);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-stroke path {
+        transition: none;
+    }
+}

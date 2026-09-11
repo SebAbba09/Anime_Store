@@ -1,0 +1,263 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <!-- =========================================================
+         META
+         ========================================================= -->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Anime Store Dakar — votre boutique spécialisée dans les articles Otaku, manga, figurines, vêtements et accessoires."
+    >
+
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    <meta
+        name="theme-color"
+        content="#6491A6"
+        data-theme-color
+    >
+
+
+    <!-- =========================================================
+         TITLE
+         ========================================================= -->
+
+    <title>
+        {% block title %}
+            Anime Store Dakar
+        {% endblock %}
+    </title>
+
+
+    <!-- =========================================================
+         GOOGLE FONTS
+         ========================================================= -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         THÈME INITIAL
+         ========================================================= -->
+
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem("anime-store-theme");
+            const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+            if (savedTheme === "dark" || (!savedTheme && prefersDarkMode)) {
+                document.documentElement.classList.add("dark");
+            }
+        })();
+    </script>
+
+
+    <!-- =========================================================
+         TAILWIND CSS
+         ========================================================= -->
+
+    <link
+        rel="stylesheet"
+        href="{% static 'dist/output.css' %}"
+    >
+
+
+    <!-- =========================================================
+         CSS SUPPLÉMENTAIRE PAR PAGE
+         ========================================================= -->
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body
+    class="
+        min-h-screen
+        bg-brand-soft
+        font-body
+        text-brand-dark
+        antialiased
+        transition-colors
+        duration-300
+        dark:bg-brand-dark
+        dark:text-white
+    "
+>
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
+    <header class="sticky top-0 z-50 border-b border-white/50 bg-brand-soft/90 backdrop-blur dark:border-white/10 dark:bg-brand-dark/90">
+        <nav class="container-page flex min-h-20 items-center justify-between gap-4">
+            <a href="{% url 'home' %}" class="flex items-center gap-3" aria-label="Anime Store Dakar - Accueil">
+                <span class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-dark font-display text-2xl font-bold text-white shadow-brand dark:bg-white dark:text-brand-dark">
+                    AS
+                </span>
+                <span class="leading-tight">
+                    <span class="block font-display text-3xl font-bold text-brand-dark dark:text-white">
+                        Anime Store
+                    </span>
+                    <span class="block text-xs font-semibold uppercase tracking-[0.25em] text-brand-dark/60 dark:text-white/60">
+                        Dakar
+                    </span>
+                </span>
+            </a>
+
+            <div class="hidden items-center gap-7 md:flex">
+                <a href="{% url 'home' %}" class="nav-link">Accueil</a>
+                <a href="{% url 'catalog' %}" class="nav-link">Boutique</a>
+                <a href="{% url 'about' %}" class="nav-link">À propos</a>
+                <a href="{% url 'contact' %}" class="nav-link">Contact</a>
+            </div>
+
+            <div class="hidden items-center gap-3 md:flex">
+                <button type="button" class="icon-button" data-theme-toggle aria-label="Activer le mode sombre" aria-pressed="false">
+                    <span data-theme-icon aria-hidden="true">☾</span>
+                </button>
+                <a
+                    href="https://wa.me/221771768690?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-primary px-6 py-3 text-sm"
+                >
+                    WhatsApp
+                </a>
+            </div>
+
+            <div class="flex items-center gap-2 md:hidden">
+                <button type="button" class="icon-button" data-theme-toggle aria-label="Activer le mode sombre" aria-pressed="false">
+                    <span data-theme-icon aria-hidden="true">☾</span>
+                </button>
+                <button
+                    type="button"
+                    class="icon-button"
+                    data-mobile-menu-button
+                    aria-label="Ouvrir le menu"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false"
+                >
+                    <span data-mobile-menu-icon>☰</span>
+                </button>
+            </div>
+        </nav>
+
+        <div id="mobile-menu" class="hidden border-t border-white/60 bg-brand-soft dark:border-white/10 dark:bg-brand-dark md:hidden" data-mobile-menu>
+            <div class="container-page flex flex-col gap-4 py-5">
+                <a href="{% url 'home' %}" class="nav-link">Accueil</a>
+                <a href="{% url 'catalog' %}" class="nav-link">Boutique</a>
+                <a href="{% url 'about' %}" class="nav-link">À propos</a>
+                <a href="{% url 'contact' %}" class="nav-link">Contact</a>
+                <a
+                    href="https://wa.me/221771768690?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-primary mt-2"
+                >
+                    Commander sur WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- =========================================================
+         CONTENU PRINCIPAL
+         ========================================================= -->
+
+    {% block content %}
+    {% endblock %}
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="bg-brand-dark py-10 text-white">
+        <div class="container-page grid gap-8 md:grid-cols-[1.4fr_1fr_1fr]">
+            <div>
+                <p class="font-display text-4xl font-bold">
+                    Anime Store Dakar
+                </p>
+                <p class="mt-2 max-w-md text-sm leading-relaxed text-white/70">
+                    Figurines, mangas, vêtements et accessoires Otaku à Dakar.
+                </p>
+            </div>
+
+            <div>
+                <p class="text-sm font-bold uppercase tracking-[0.18em] text-white/50">
+                    Navigation
+                </p>
+                <div class="mt-4 flex flex-col gap-3 text-sm font-semibold text-white/75">
+                    <a href="{% url 'home' %}" class="transition duration-300 hover:text-white">Accueil</a>
+                    <a href="{% url 'catalog' %}" class="transition duration-300 hover:text-white">Boutique</a>
+                    <a href="{% url 'about' %}" class="transition duration-300 hover:text-white">À propos</a>
+                    <a href="{% url 'contact' %}" class="transition duration-300 hover:text-white">Contact</a>
+                </div>
+            </div>
+
+            <div>
+                <p class="text-sm font-bold uppercase tracking-[0.18em] text-white/50">
+                    Réseaux
+                </p>
+                <div class="mt-4 flex flex-col gap-3 text-sm font-semibold text-white/75">
+                    <a href="https://www.instagram.com/anime_store_dakar" target="_blank" rel="noopener noreferrer" class="transition duration-300 hover:text-white">Instagram</a>
+                    <a href="https://whatsapp.com/channel/0029VbAhcRxISTkSzdlbYE1z" target="_blank" rel="noopener noreferrer" class="transition duration-300 hover:text-white">Canal WhatsApp</a>
+                    <a href="https://wa.me/221771768690" target="_blank" rel="noopener noreferrer" class="transition duration-300 hover:text-white">WhatsApp Direct</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-page mt-8 border-t border-white/10 pt-6 text-xs font-medium text-white/50">
+            © 2026 Anime Store Dakar. Tous droits réservés.
+        </div>
+    </footer>
+
+
+    <!-- =========================================================
+         JAVASCRIPT PRINCIPAL
+         ========================================================= -->
+
+    <script
+        src="{% static 'js/main.js' %}"
+        defer
+    ></script>
+
+
+    <!-- =========================================================
+         JAVASCRIPT SUPPLÉMENTAIRE PAR PAGE
+         ========================================================= -->
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+
+</html>
