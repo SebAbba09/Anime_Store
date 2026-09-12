@@ -2,7 +2,7 @@
 
 Ce document est le point de reprise officiel du projet. Il peut être copié-collé intégralement dans une autre conversation (ChatGPT, Claude, Codex, etc.) pour reprendre le travail exactement là où il s'est arrêté, sans rien perdre ni repartir de zéro.
 
-Dernière mise à jour : 11 septembre 2026
+Dernière mise à jour : 12 septembre 2026
 
 ---
 
@@ -183,7 +183,7 @@ Le fichier `static/src/input.css` définit les classes réutilisables du projet 
 | **Phase 5** | Catalogue frontend | **Terminée** | `catalog.html` avec 18 produits, recherche, filtres par catégorie, tri, stock. |
 | **Phase 6** | Fiche produit | **Terminée** | `product.html` avec galerie, détails, stock, commande WhatsApp personnalisée, suggestions. |
 | **Phase 7** | Pages secondaires | **Terminée** | `about.html` (histoire/valeurs) et `contact.html` (liens réels + FAQ accordéon). |
-| **Phase 8** | Panier frontend & commande WhatsApp | **À faire (Prochaine étape)** | Panier en JavaScript/localStorage, récapitulatif, génération du message WhatsApp. |
+| **Phase 8** | Panier frontend & commande WhatsApp | **Terminée** | Module cart.js, tiroir drawer animé, localStorage, sélecteur de quantité, récapitulatif & commande groupée WhatsApp, badges dynamiques. |
 | **Phase 9** | Backend PostgreSQL & Modèles Django | **À faire** | Modèles `Product`, `Category`, `Order`, migrations. |
 | **Phase 10** | Administration Django | **À faire** | Gestion des stocks, images multiples, catégories dans l'admin. |
 | **Phase 11** | Commandes & notifications WhatsApp | **À faire** | Suivi et historisation des commandes. |
@@ -197,22 +197,17 @@ Le fichier `static/src/input.css` définit les classes réutilisables du projet 
 
 Pour conserver une progression propre et sans bugs, respecter scrupuleusement l'ordre suivant :
 
-### 🎯 Prochaine priorité : Phase 8 — Panier frontend & finalisation WhatsApp
-1. **Système de panier côté client (`static/js/cart.js` ou dans `main.js`) :**
-   - Stockage du panier dans `localStorage` (persistance hors rechargement).
-   - Bouton « Ajouter au panier » sur la fiche produit (`product.html`) et sur les cartes du catalogue (`catalog.html`).
-   - Tiroir latéral (drawer) ou modale pour afficher les articles sélectionnés, ajuster les quantités, voir le total en FCFA.
-2. **Génération du message WhatsApp groupé :**
-   - Regrouper tous les articles du panier en un message WhatsApp clair et formaté :
-     ```text
-     Bonjour Anime Store Dakar 👋
-     Je souhaite commander les articles suivants :
-     - 1x Figurine Naruto Hokage (18 500 FCFA)
-     - 2x Collier L Death Note (5 000 FCFA)
-     Total : 23 500 FCFA
-     Pouvez-vous me confirmer la disponibilité et les modalités de livraison à Dakar ?
-     ```
-   - Bouton de validation qui redirige directement vers l'API WhatsApp (`https://wa.me/221771768690?text=...`).
+### 🎯 Prochaine priorité : Phase 9 — Modèles de données Django & backend catalogue
+1. **Stabilisation avant backend :**
+   - Tester une dernière fois le panier dans le navigateur : ajout depuis catalogue, ajout depuis fiche produit, quantités, suppression, vidage et lien WhatsApp groupé.
+   - Garder les données fictives `PRODUCTS` comme référence de migration.
+2. **Création progressive des modèles Django :**
+   - Commencer par `Category` et `Product`.
+   - Ajouter ensuite `ProductImage` seulement si la fiche produit doit gérer plusieurs photos.
+   - Reporter `Order` et `OrderItem` après validation du catalogue backend.
+3. **Migration des données fictives :**
+   - Transformer progressivement les produits de `PRODUCTS` en données réelles dans SQLite d'abord.
+   - Passer à PostgreSQL seulement quand le modèle de données est validé.
 
 ### 🎯 Étape suivante : Phase 9 — Modèles de données Django & Base de données
 1. Passer des données fictives de `shop/views.py` (`PRODUCTS`) à de vrais modèles Django dans `shop/models.py` :
@@ -255,11 +250,11 @@ Pour conserver une progression propre et sans bugs, respecter scrupuleusement l'
 > - Pages À propos (`templates/about.html`) et Contact/FAQ (`templates/contact.html`).
 > - Vrais liens réseaux intégrés : WhatsApp `+221 77 176 86 90`, canal WhatsApp et Instagram `@anime_store_dakar`.
 >
-> **Tâche prioritaire actuelle :** Réaliser la **Phase 8 (Panier frontend interactif & commande groupée WhatsApp)** :
-> 1. Gestion d'un panier en JavaScript natif avec `localStorage`.
-> 2. Boutons d'ajout au panier sur le catalogue et la fiche produit.
-> 3. Tiroir latéral (drawer) récapitulatif avec quantités, suppression et total en FCFA.
-> 4. Bouton de finalisation générant un message WhatsApp pré-formaté avec tous les articles du panier envoyé au `+221 77 176 86 90`.
+> **Tâche prioritaire actuelle :** Préparer la **Phase 9 (backend catalogue Django)** :
+> 1. Vérifier une dernière fois le panier frontend dans le navigateur.
+> 2. Créer progressivement les modèles `Category` et `Product`.
+> 3. Migrer les produits fictifs de `shop/views.py` vers la base locale SQLite.
+> 4. Préparer ensuite l'admin Django avant de basculer vers PostgreSQL.
 >
 > **Rappel commandes de build & test :**
 > `npm run build:css ; .\venv\Scripts\python.exe manage.py check ; .\venv\Scripts\python.exe manage.py runserver`

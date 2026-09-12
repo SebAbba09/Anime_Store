@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Boutique — Anime Store Dakar{% endblock %}
 
@@ -205,9 +206,18 @@
                             {% elif product.color == 'white' %}bg-white text-brand-dark dark:bg-white/10 dark:text-white
                             {% else %}bg-brand-soft text-brand-dark dark:bg-white/5 dark:text-white{% endif %}"
                         >
+                            {% if product.image %}
+                            <img
+                                src="{% static product.image %}"
+                                alt="{{ product.name }}"
+                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                loading="lazy"
+                            >
+                            {% else %}
                             <span class="font-display text-5xl font-bold transition-transform duration-500 group-hover:scale-110">
                                 {{ product.style }}
                             </span>
+                            {% endif %}
 
                             <!-- Badge stock en rupture -->
                             {% if not product.stock %}
@@ -252,8 +262,8 @@
                             {{ product.description }}
                         </p>
 
-                        <!-- Indicateur stock + bouton voir -->
-                        <div class="mt-4 flex items-center justify-between gap-3">
+                        <!-- Indicateur stock + actions -->
+                        <div class="mt-4 flex items-center justify-between gap-2">
                             <span class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide
                                 {% if product.stock %}text-success{% else %}text-danger{% endif %}"
                             >
@@ -263,12 +273,34 @@
                                 {% if product.stock %}En stock{% else %}Rupture{% endif %}
                             </span>
 
-                            <a
-                                href="{% url 'product_detail' product.slug %}"
-                                class="inline-flex items-center gap-1 text-xs font-bold text-brand-dark underline decoration-brand-dark/30 underline-offset-4 transition duration-200 hover:decoration-brand-dark dark:text-white dark:decoration-white/30 dark:hover:decoration-white"
-                            >
-                                Voir le produit →
-                            </a>
+                            <div class="flex items-center gap-2">
+                                {% if product.stock %}
+                                <button
+                                    type="button"
+                                    data-add-to-cart
+                                    data-slug="{{ product.slug }}"
+                                    data-name="{{ product.name }}"
+                                    data-price="{{ product.price }}"
+                                    data-category="{{ product.category }}"
+                                    data-image="{{ product.image|default:'' }}"
+                                    data-style="{{ product.style|default:'' }}"
+                                    data-color="{{ product.color|default:'' }}"
+                                    class="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-brand-dark transition duration-200 hover:bg-brand-dark hover:text-white dark:bg-white dark:text-brand-dark dark:hover:bg-brand-soft"
+                                    title="Ajouter au panier"
+                                    aria-label="Ajouter {{ product.name }} au panier"
+                                >
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                </button>
+                                {% endif %}
+                                <a
+                                    href="{% url 'product_detail' product.slug %}"
+                                    class="inline-flex items-center gap-1 text-xs font-bold text-brand-dark underline decoration-brand-dark/30 underline-offset-4 transition duration-200 hover:decoration-brand-dark dark:text-white dark:decoration-white/30 dark:hover:decoration-white"
+                                >
+                                    Détails →
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </article>

@@ -139,6 +139,12 @@
             </div>
 
             <div class="hidden items-center gap-3 md:flex">
+                <button type="button" class="icon-button relative" data-cart-toggle aria-label="Ouvrir le panier">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    <span data-cart-count class="absolute -top-1.5 -right-1.5 hidden flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-dark px-1 text-[11px] font-bold text-white shadow dark:bg-white dark:text-brand-dark">0</span>
+                </button>
                 <button type="button" class="icon-button" data-theme-toggle aria-label="Activer le mode sombre" aria-pressed="false">
                     <span data-theme-icon aria-hidden="true">☾</span>
                 </button>
@@ -153,6 +159,12 @@
             </div>
 
             <div class="flex items-center gap-2 md:hidden">
+                <button type="button" class="icon-button relative" data-cart-toggle aria-label="Ouvrir le panier">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    <span data-cart-count class="absolute -top-1.5 -right-1.5 hidden flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-dark px-1 text-[11px] font-bold text-white shadow dark:bg-white dark:text-brand-dark">0</span>
+                </button>
                 <button type="button" class="icon-button" data-theme-toggle aria-label="Activer le mode sombre" aria-pressed="false">
                     <span data-theme-icon aria-hidden="true">☾</span>
                 </button>
@@ -175,11 +187,21 @@
                 <a href="{% url 'catalog' %}" class="nav-link">Boutique</a>
                 <a href="{% url 'about' %}" class="nav-link">À propos</a>
                 <a href="{% url 'contact' %}" class="nav-link">Contact</a>
+                <button
+                    type="button"
+                    data-cart-toggle
+                    class="btn btn-secondary flex items-center justify-center gap-2"
+                >
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    Mon Panier (<span data-cart-count>0</span>)
+                </button>
                 <a
                     href="https://wa.me/221771768690?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="btn btn-primary mt-2"
+                    class="btn btn-primary"
                 >
                     Commander sur WhatsApp
                 </a>
@@ -240,6 +262,90 @@
         </div>
     </footer>
 
+    <!-- =========================================================
+         CART DRAWER (Tiroir Panier)
+         ========================================================= -->
+
+    <div id="cart-drawer" class="fixed inset-0 z-[100] hidden" aria-labelledby="cart-title" role="dialog" aria-modal="true">
+        <!-- Overlay backdrop -->
+        <div id="cart-overlay" class="fixed inset-0 bg-brand-dark/60 backdrop-blur-sm opacity-0 transition-opacity duration-300" data-cart-close></div>
+
+        <div class="fixed inset-y-0 right-0 flex max-w-full pl-6">
+            <div id="cart-panel" class="flex h-full w-screen max-w-md flex-col translate-x-full bg-brand-soft shadow-2xl transition-transform duration-300 ease-in-out dark:bg-brand-dark">
+                <!-- En-tête du tiroir -->
+                <div class="flex items-center justify-between border-b border-brand-dark/10 p-5 dark:border-white/10">
+                    <div class="flex items-baseline gap-2">
+                        <h2 id="cart-title" class="font-display text-2xl font-bold text-brand-dark dark:text-white">
+                            Mon Panier
+                        </h2>
+                        <span id="cart-title-count" class="text-sm font-bold text-brand-dark/60 dark:text-white/60"></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button
+                            type="button"
+                            class="rounded-lg px-2.5 py-1 text-xs font-semibold text-brand-dark/50 transition hover:bg-red-500/10 hover:text-red-500 dark:text-white/50 dark:hover:bg-red-500/20 dark:hover:text-red-400"
+                            data-cart-clear
+                            title="Vider tous les articles"
+                        >
+                            Vider
+                        </button>
+                        <button
+                            type="button"
+                            class="icon-button"
+                            data-cart-close
+                            aria-label="Fermer le panier"
+                        >
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contenu / Liste des articles -->
+                <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3">
+                    <!-- Rendu dynamique par static/js/cart.js -->
+                </div>
+
+                <!-- Pied de tiroir / Validation -->
+                <div id="cart-footer" class="hidden border-t border-brand-dark/10 bg-white/60 p-5 backdrop-blur dark:border-white/10 dark:bg-white/5">
+                    <div class="flex items-center justify-between text-xs font-semibold text-brand-dark/60 dark:text-white/60">
+                        <span id="cart-footer-count">0 articles</span>
+                        <span class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+                            <span class="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Livraison Dakar rapide
+                        </span>
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between">
+                        <span class="text-sm font-bold uppercase tracking-wider text-brand-dark/70 dark:text-white/70">Total</span>
+                        <span id="cart-total" class="font-display text-2xl font-bold text-brand-dark dark:text-white">
+                            0 FCFA
+                        </span>
+                    </div>
+
+                    <p class="mt-2 text-[11px] leading-relaxed text-brand-dark/60 dark:text-white/55">
+                        Commande transmise directement au service client Anime Store Dakar sur WhatsApp avec le récapitulatif complet.
+                    </p>
+
+                    <a
+                        id="cart-whatsapp-btn"
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-primary mt-4 w-full justify-center gap-2 py-3.5 text-sm font-bold shadow-brand"
+                    >
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        Valider la commande sur WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- =========================================================
          JAVASCRIPT PRINCIPAL
@@ -247,6 +353,11 @@
 
     <script
         src="{% static 'js/main.js' %}"
+        defer
+    ></script>
+
+    <script
+        src="{% static 'js/cart.js' %}"
         defer
     ></script>
 
