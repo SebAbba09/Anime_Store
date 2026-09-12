@@ -3,10 +3,18 @@
     {
       "src": "config/wsgi.py",
       "use": "@vercel/python",
-      "config": { "runtime": "python3.12" }
+      "config": {
+        "runtime": "python3.12",
+        "includeFiles": "staticfiles/**"
+      }
+    },
+    {
+      "src": "staticfiles/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
+    { "src": "/static/(.*)", "dest": "/staticfiles/$1" },
     { "src": "/(.*)", "dest": "config/wsgi.py" }
   ]
 }
