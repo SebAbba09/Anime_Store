@@ -1,0 +1,25 @@
+# Force LF pour les scripts shell (obligatoire pour Vercel)
+*.sh text eol=lf
+
+# Fichiers Windows gardent CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Fichiers Python / JS / CSS / HTML : LF partout
+*.py text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+
+# Binaires : ne pas toucher
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
