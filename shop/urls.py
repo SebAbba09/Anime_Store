@@ -1,6 +1,13 @@
 from django.urls import path
 
-from .views import about, catalog, contact, home, product_detail
+from .views import (
+    about,
+    catalog,
+    contact,
+    create_order,
+    home,
+    product_detail,
+)
 
 
 urlpatterns = [
@@ -9,4 +16,5 @@ urlpatterns = [
     path("boutique/<slug:slug>/", product_detail, name="product_detail"),
     path("a-propos/", about, name="about"),
     path("contact/", contact, name="contact"),
+    path("api/orders/", create_order, name="create_order"),
 ]
