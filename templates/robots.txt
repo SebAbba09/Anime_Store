@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Zones à ne pas indexer
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: {{ SITE_URL }}/sitemap.xml

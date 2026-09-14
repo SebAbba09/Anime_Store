@@ -4,62 +4,105 @@
 <html lang="fr">
 
 <head>
-
     <!-- =========================================================
-         META
+         META DE BASE
          ========================================================= -->
 
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Anime Store Dakar — votre boutique spécialisée dans les articles Otaku, manga, figurines, vêtements et accessoires."
-    >
-
-    <meta
-        name="robots"
-        content="index, follow"
-    >
-
-    <meta
-        name="theme-color"
-        content="#6491A6"
-        data-theme-color
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- =========================================================
          TITLE
          ========================================================= -->
 
-    <title>
-        {% block title %}
-            Anime Store Dakar
-        {% endblock %}
-    </title>
+    <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
 
+    <!-- =========================================================
+         SEO — META DE BASE
+         ========================================================= -->
+
+    <meta name="description" content="{% block meta_description %}Boutique Otaku à Dakar — figurines collector, mangas, vêtements et accessoires japonais. Commande rapide sur WhatsApp.{% endblock %}">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    {% block meta_keywords %}{% endblock %}
+
+    <!-- =========================================================
+         SEO — URL CANONIQUE
+         ========================================================= -->
+
+    <link rel="canonical" href="{{ SITE_URL }}{% block canonical_path %}{{ request.path }}{% endblock %}">
+
+    <!-- =========================================================
+         OPENGRAPH (Facebook, WhatsApp, LinkedIn)
+         ========================================================= -->
+
+    <meta property="og:site_name" content="{{ SITE_NAME }}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{{ SITE_NAME }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Boutique Otaku à Dakar — figurines collector, mangas, vêtements et accessoires japonais.{% endblock %}">
+    <meta property="og:url" content="{{ SITE_URL }}{{ request.path }}">
+    <meta property="og:image" content="{% block og_image %}{{ SITE_URL }}/static/{{ SITE_DEFAULT_OG_IMAGE }}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- =========================================================
+         TWITTER CARDS
+         ========================================================= -->
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ SITE_NAME }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Boutique Otaku à Dakar — figurines, mangas, vêtements et accessoires.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ SITE_URL }}/static/{{ SITE_DEFAULT_OG_IMAGE }}{% endblock %}">
+
+    <!-- =========================================================
+         THEME COLOR
+         ========================================================= -->
+
+    <meta name="theme-color" content="#6491A6" data-theme-color>
+
+    <!-- =========================================================
+         FAVICON
+         ========================================================= -->
+
+       <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}?v=2">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}?v=2">
+    <link rel="apple-touch-icon" href="{% static 'images/favicon.png' %}?v=2">
+
+    <!-- =========================================================
+         JSON-LD — Données structurées (Schema.org)
+         ========================================================= -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "{{ SITE_NAME }}",
+        "url": "{{ SITE_URL }}",
+        "logo": "{{ SITE_URL }}/static/images/favicon.svg",
+        "sameAs": [
+            "{{ SITE_INSTAGRAM }}"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+221775958179",
+            "contactType": "customer service",
+            "areaServed": "SN",
+            "availableLanguage": "fr"
+        }
+    }
+    </script>
+
+    {% block schema_extra %}{% endblock %}
 
     <!-- =========================================================
          GOOGLE FONTS
          ========================================================= -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- =========================================================
          THÈME INITIAL
@@ -69,33 +112,20 @@
         (function () {
             const savedTheme = localStorage.getItem("anime-store-theme");
             const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
             if (savedTheme === "dark" || (!savedTheme && prefersDarkMode)) {
                 document.documentElement.classList.add("dark");
             }
         })();
     </script>
 
-
     <!-- =========================================================
          TAILWIND CSS
          ========================================================= -->
 
-    <link
-        rel="stylesheet"
-        href="{% static 'dist/output.css' %}"
-    >
+    <link rel="stylesheet" href="{% static 'dist/output.css' %}">
 
-
-    <!-- =========================================================
-         CSS SUPPLÉMENTAIRE PAR PAGE
-         ========================================================= -->
-
-    {% block extra_css %}
-    {% endblock %}
-
+    {% block extra_css %}{% endblock %}
 </head>
-
 
 <body
     class="
@@ -110,12 +140,24 @@
         dark:text-white
     "
 >
+    <!-- =========================================================
+         KINETIC TEXT LOADER
+         ========================================================= -->
+
+    <div id="site-loader" class="site-loader" aria-hidden="true">
+        <div class="site-loader-text">
+            <span>A</span><span>n</span><span>i</span><span>m</span><span>e</span>
+            <span class="site-loader-space"></span>
+            <span>S</span><span>t</span><span>o</span><span>r</span><span>e</span>
+        </div>
+    </div>
 
     <!-- =========================================================
          HEADER
          ========================================================= -->
 
-    <header class="sticky top-0 z-50 border-b border-white/50 bg-brand-soft/90 backdrop-blur dark:border-white/10 dark:bg-brand-dark/90">
+    <header id="site-header" class="sticky top-0 z-50 border-b border-white/50 bg-brand-soft/90 backdrop-blur transition-all duration-300 dark:border-white/10 dark:bg-brand-dark/90">
+         <div class="spotlight-layer" aria-hidden="true"></div>
         <nav class="container-page flex min-h-20 items-center justify-between gap-4">
             <a href="{% url 'home' %}" class="flex items-center gap-3" aria-label="Anime Store Dakar - Accueil">
                 <span class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-dark font-display text-2xl font-bold text-white shadow-brand dark:bg-white dark:text-brand-dark">
@@ -139,6 +181,11 @@
             </div>
 
             <div class="hidden items-center gap-3 md:flex">
+                <button type="button" class="icon-button" data-search-trigger aria-label="Ouvrir la recherche">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                </button>
                 <button type="button" class="icon-button relative" data-cart-toggle aria-label="Ouvrir le panier">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -149,7 +196,7 @@
                     <span data-theme-icon aria-hidden="true">☾</span>
                 </button>
                 <a
-                    href="https://wa.me/221771768690?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B"
+                    href="https://wa.me/221775958179?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="btn btn-primary px-6 py-3 text-sm"
@@ -159,6 +206,11 @@
             </div>
 
             <div class="flex items-center gap-2 md:hidden">
+                <button type="button" class="icon-button" data-search-trigger aria-label="Ouvrir la recherche">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                </button>
                 <button type="button" class="icon-button relative" data-cart-toggle aria-label="Ouvrir le panier">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -198,7 +250,7 @@
                     Mon Panier (<span data-cart-count>0</span>)
                 </button>
                 <a
-                    href="https://wa.me/221771768690?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B"
+                    href="https://wa.me/221775958179?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="btn btn-primary"
@@ -252,7 +304,7 @@
                 <div class="mt-4 flex flex-col gap-3 text-sm font-semibold text-white/75">
                     <a href="https://www.instagram.com/anime_store_dakar" target="_blank" rel="noopener noreferrer" class="transition duration-300 hover:text-white">Instagram</a>
                     <a href="https://whatsapp.com/channel/0029VbAhcRxISTkSzdlbYE1z" target="_blank" rel="noopener noreferrer" class="transition duration-300 hover:text-white">Canal WhatsApp</a>
-                    <a href="https://wa.me/221771768690" target="_blank" rel="noopener noreferrer" class="transition duration-300 hover:text-white">WhatsApp Direct</a>
+                    <a href="https://wa.me/221775958179" target="_blank" rel="noopener noreferrer" class="transition duration-300 hover:text-white">WhatsApp Direct</a>
                 </div>
             </div>
         </div>
@@ -263,16 +315,65 @@
     </footer>
 
     <!-- =========================================================
+         SEARCH OVERLAY (Recherche plein écran)
+         ========================================================= -->
+
+    <div id="search-overlay" class="search-overlay" aria-hidden="true">
+        <div class="search-overlay-backdrop" data-search-close></div>
+
+        <div class="search-overlay-panel" role="dialog" aria-modal="true" aria-label="Recherche">
+
+            <form method="get" action="{% url 'catalog' %}" class="search-overlay-form">
+                <svg class="search-overlay-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                </svg>
+
+                <input
+                    type="search"
+                    name="q"
+                    id="search-overlay-input"
+                    class="search-overlay-input"
+                    placeholder="Rechercher un produit, un style, un manga..."
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+                <button type="button" class="search-overlay-close" data-search-close aria-label="Fermer la recherche">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div class="search-overlay-hints">
+                <p class="search-overlay-hint-label">Recherches populaires</p>
+                <div class="search-overlay-chips">
+                    <a href="{% url 'catalog' %}?q=naruto" class="search-chip">Naruto</a>
+                    <a href="{% url 'catalog' %}?q=one+piece" class="search-chip">One Piece</a>
+                    <a href="{% url 'catalog' %}?q=figurine" class="search-chip">Figurine</a>
+                    <a href="{% url 'catalog' %}?q=hoodie" class="search-chip">Hoodie</a>
+                    <a href="{% url 'catalog' %}?q=manga" class="search-chip">Manga</a>
+                </div>
+            </div>
+
+            <p class="search-overlay-tip">
+                Astuce : ouvre la recherche n'importe où avec
+                <kbd class="search-kbd">Ctrl</kbd>
+                <kbd class="search-kbd">K</kbd>
+            </p>
+
+        </div>
+    </div>
+
+    <!-- =========================================================
          CART DRAWER (Tiroir Panier)
          ========================================================= -->
 
     <div id="cart-drawer" class="fixed inset-0 z-[100] hidden" aria-labelledby="cart-title" role="dialog" aria-modal="true">
-        <!-- Overlay backdrop -->
         <div id="cart-overlay" class="fixed inset-0 bg-brand-dark/60 backdrop-blur-sm opacity-0 transition-opacity duration-300" data-cart-close></div>
 
         <div class="fixed inset-y-0 right-0 flex max-w-full pl-6">
             <div id="cart-panel" class="flex h-full w-screen max-w-md flex-col translate-x-full bg-brand-soft shadow-2xl transition-transform duration-300 ease-in-out dark:bg-brand-dark">
-                <!-- En-tête du tiroir -->
                 <div class="flex items-center justify-between border-b border-brand-dark/10 p-5 dark:border-white/10">
                     <div class="flex items-baseline gap-2">
                         <h2 id="cart-title" class="font-display text-2xl font-bold text-brand-dark dark:text-white">
@@ -302,12 +403,8 @@
                     </div>
                 </div>
 
-                <!-- Contenu / Liste des articles -->
-                <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3">
-                    <!-- Rendu dynamique par static/js/cart.js -->
-                </div>
+                <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
 
-                <!-- Pied de tiroir / Validation -->
                 <div id="cart-footer" class="hidden border-t border-brand-dark/10 bg-white/60 p-5 backdrop-blur dark:border-white/10 dark:bg-white/5">
                     <div class="flex items-center justify-between text-xs font-semibold text-brand-dark/60 dark:text-white/60">
                         <span id="cart-footer-count">0 articles</span>
@@ -345,6 +442,24 @@
         </div>
     </div>
 
+
+    <!-- =========================================================
+         BOUTON WHATSAPP FLOTTANT (Sprint 1)
+         ========================================================= -->
+
+    <a
+        href="https://wa.me/221775958179?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B%2C%20j%27ai%20une%20question%20!"
+        id="whatsapp-float"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="whatsapp-float"
+        aria-label="Discuter sur WhatsApp"
+    >
+        <span class="whatsapp-float-pulse" aria-hidden="true"></span>
+        <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+    </a>
 
 
     <!-- =========================================================

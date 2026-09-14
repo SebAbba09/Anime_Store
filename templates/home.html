@@ -1,93 +1,164 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}
-Anime Store Dakar
-{% endblock %}
+{% block title %}Anime Store Dakar — Boutique Otaku, figurines & mangas{% endblock %}
+
+{% block meta_description %}Découvre la boutique Otaku de référence à Dakar : figurines collector, mangas, vêtements et accessoires japonais. Commande rapide sur WhatsApp.{% endblock %}
+
+{% block og_title %}Anime Store Dakar — Boutique Otaku{% endblock %}
+
+{% block og_description %}Figurines, mangas, vêtements et accessoires Otaku livrés à Dakar. Commande simple via WhatsApp.{% endblock %}
 
 {% block content %}
 
 <main class="bg-brand-soft transition-colors duration-300 dark:bg-brand-dark">
 
     <!-- =========================================================
-         HERO
+         HERO V2 — Image immersive + 3 cartes glassmorphism
          ========================================================= -->
 
-    <section class="hero-shell">
-        <div class="container-page grid min-h-[calc(100vh-5rem)] items-center gap-10 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:py-16">
-            <div class="text-center lg:text-left">
-                <p class="eyebrow text-brand-soft dark:text-brand-soft/70">
-                    Catalogue otaku à Dakar
-                </p>
+    <section class="hero-v2">
+        <div class="hero-v2__media" aria-hidden="true">
+            <img
+                src="{% static 'images/hero/hero-light.jpg' %}"
+                alt="Branche de cerisiers en fleurs sur ciel bleu"
+                class="hero-v2__img hero-v2__img--light"
+                loading="eager"
+            >
+            <img
+                src="{% static 'images/hero/hero-dark.jpg' %}"
+                alt="Allée de cerisiers illuminés la nuit au Japon"
+                class="hero-v2__img hero-v2__img--dark"
+                loading="eager"
+            >
+            <div class="hero-v2__overlay hero-v2__overlay--light"></div>
+            <div class="hero-v2__overlay hero-v2__overlay--dark"></div>
+        </div>
 
-                <h1 class="font-display text-6xl font-bold leading-none text-brand-dark sm:text-7xl md:text-8xl">
-                    Anime Store Dakar
-                </h1>
+        <div class="hero-v2__content">
+            <p class="hero-v2__eyebrow">Catalogue otaku à Dakar</p>
 
-                <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-brand-dark/80 dark:text-white/75 sm:text-lg lg:mx-0">
-                    Une vitrine e-commerce moderne pour figurines, mangas, vêtements et accessoires, avec une expérience claire, mobile-first et assez premium pour inspirer confiance.
-                </p>
+            <h1 class="hero-v2__title">
+                <span class="hero-v2__line"><span>Anime Store</span></span>
+                <span class="hero-v2__line"><span>Dakar</span></span>
+            </h1>
 
-                <div class="mt-10 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center lg:justify-start">
-                    <a href="{% url 'catalog' %}" class="btn btn-primary">
-                        Découvrir la boutique
-                    </a>
+            <p class="hero-v2__subtitle">
+                Une vitrine e-commerce moderne pour figurines, mangas, vêtements et accessoires, avec une expérience claire, mobile-first et assez premium pour inspirer confiance.
+            </p>
 
-                    <a href="#parallax-products" class="btn btn-secondary">
-                        Voir les drops
-                    </a>
+            <div class="hero-v2__actions">
+                <a href="{% url 'catalog' %}" class="btn btn-primary btn-pop">
+                    Découvrir la boutique
+                </a>
+                <a href="#parallax-products" class="btn btn-secondary btn-pop">
+                    Voir les drops
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-v2__cards">
+            <a href="{% url 'catalog' %}?category=Figurines" class="hero-card">
+                <div class="hero-card__thumb">
+                    <img src="{% static 'images/avatars/avatar-1.png' %}" alt="" loading="lazy">
                 </div>
-
-                <div class="mt-10 grid gap-3 sm:grid-cols-3">
-                    <div class="stat-card">
-                        <p class="text-2xl font-bold">4+</p>
-                        <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-brand-dark/55 dark:text-white/55">Catégories</p>
-                    </div>
-
-                    <div class="stat-card">
-                        <p class="text-2xl font-bold">V1</p>
-                        <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-brand-dark/55 dark:text-white/55">Catalogue</p>
-                    </div>
-
-                    <div class="stat-card">
-                        <p class="text-2xl font-bold">WA</p>
-                        <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-brand-dark/55 dark:text-white/55">Commande</p>
-                    </div>
+                <div class="hero-card__body">
+                    <span class="hero-card__count">24 articles</span>
+                    <h3 class="hero-card__title">Figurines</h3>
+                    <p class="hero-card__desc">Héros shonen & collector</p>
                 </div>
+                <span class="hero-card__arrow" aria-hidden="true">→</span>
+            </a>
+
+            <a href="{% url 'catalog' %}?category=Mangas" class="hero-card">
+                <div class="hero-card__thumb">
+                    <img src="{% static 'images/avatars/avatar-5.png' %}" alt="" loading="lazy">
+                </div>
+                <div class="hero-card__body">
+                    <span class="hero-card__count">12 tomes</span>
+                    <h3 class="hero-card__title">Mangas</h3>
+                    <p class="hero-card__desc">Éditions & collectors</p>
+                </div>
+                <span class="hero-card__arrow" aria-hidden="true">→</span>
+            </a>
+
+            <a href="{% url 'catalog' %}?category=Vêtements" class="hero-card">
+                <div class="hero-card__thumb">
+                    <img src="{% static 'images/avatars/avatar-4.png' %}" alt="" loading="lazy">
+                </div>
+                <div class="hero-card__body">
+                    <span class="hero-card__count">8 pièces</span>
+                    <h3 class="hero-card__title">Vêtements</h3>
+                    <p class="hero-card__desc">Haoris & streetwear</p>
+                </div>
+                <span class="hero-card__arrow" aria-hidden="true">→</span>
+            </a>
+        </div>
+    </section>
+
+
+    <!-- =========================================================
+         PREUVE SOCIALE — EMPILEMENT D'AVATARS
+         ========================================================= -->
+
+    <section class="border-y border-brand-dark/5 bg-white/60 py-6 dark:border-white/5 dark:bg-white/5">
+        <div class="reveal container-page flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-7">
+
+            <div class="avatar-stack">
+                <a href="{% url 'about' %}#team-ismaila" class="avatar-stack-link" aria-label="Voir Ismaila dans l'équipe">
+                    <img
+                        src="{% static 'images/avatars/avatar-1.png' %}"
+                        alt="Ismaila"
+                        class="avatar-stack-item"
+                        loading="lazy"
+                    >
+                </a>
+                <a href="{% url 'about' %}#team-abdoulaye" class="avatar-stack-link" aria-label="Voir Abdoulaye dans l'équipe">
+                    <img
+                        src="{% static 'images/avatars/avatar-2.png' %}"
+                        alt="Abdoulaye"
+                        class="avatar-stack-item"
+                        loading="lazy"
+                    >
+                </a>
+                <a href="{% url 'about' %}#team-fatou" class="avatar-stack-link" aria-label="Voir Fatou dans l'équipe">
+                    <img
+                        src="{% static 'images/avatars/avatar-3.png' %}"
+                        alt="Fatou"
+                        class="avatar-stack-item"
+                        loading="lazy"
+                    >
+                </a>
+                <a href="{% url 'about' %}#team-boubacar" class="avatar-stack-link" aria-label="Voir Boubacar dans l'équipe">
+                    <img
+                        src="{% static 'images/avatars/avatar-4.png' %}"
+                        alt="Boubacar"
+                        class="avatar-stack-item"
+                        loading="lazy"
+                    >
+                </a>
+                <a href="{% url 'about' %}#team-seba" class="avatar-stack-link" aria-label="Voir Seba dans l'équipe">
+                    <img
+                        src="{% static 'images/avatars/avatar-5.png' %}"
+                        alt="Seba"
+                        class="avatar-stack-item"
+                        loading="lazy"
+                    >
+                </a>
+                <a href="{% url 'about' %}#team" class="avatar-stack-link" aria-label="Voir toute l'équipe">
+                    <span class="avatar-stack-more">+150</span>
+                </a>
             </div>
 
-            <div class="grid gap-4 sm:grid-cols-[0.85fr_1.15fr]">
-                <div class="space-y-4 sm:pt-16">
-                    <article class="commerce-panel">
-                        <p class="badge badge-primary">Drop</p>
-                        <h2 class="mt-6 text-xl font-bold">Nouveautés manga</h2>
-                        <p class="mt-2 text-sm leading-relaxed text-brand-dark/65 dark:text-white/65">Sélection courte, lisible, orientée achat rapide.</p>
-                    </article>
-
-                    <article class="commerce-panel bg-brand-dark text-white dark:bg-white dark:text-brand-dark">
-                        <p class="text-xs font-bold uppercase tracking-[0.22em] text-white/55 dark:text-brand-dark/55">Stock</p>
-                        <p class="mt-6 text-4xl font-bold">24</p>
-                        <p class="mt-1 text-sm font-semibold">produits à présenter</p>
-                    </article>
-                </div>
-
-                <div class="media-frame min-h-[28rem] bg-white p-4">
-                    <div class="flex h-full flex-col justify-between rounded-lg bg-brand-dark p-5 text-white">
-                        <div class="flex items-start justify-between gap-4">
-                            <p class="badge bg-white text-brand-dark">Figurine</p>
-                            <p class="text-sm font-bold">15 000 FCFA</p>
-                        </div>
-
-                        <div class="mx-auto flex aspect-square w-4/5 items-center justify-center rounded-lg bg-white/10">
-                            <span class="font-display text-7xl font-bold">Otaku</span>
-                        </div>
-
-                        <div>
-                            <h2 class="text-2xl font-bold">Collection premium</h2>
-                            <p class="mt-2 text-sm leading-relaxed text-white/70">Un grand espace visuel prêt à recevoir tes vraies photos produits.</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center sm:text-left">
+                <p class="text-sm font-bold text-brand-dark dark:text-white">
+                    Rejoint par <span class="text-brand">+150 fans d'Otaku</span> à Dakar
+                </p>
+                <p class="mt-0.5 text-xs font-medium text-brand-dark/55 dark:text-white/55">
+                    Figurines, mangas et goodies livrés dans toute la ville
+                </p>
             </div>
+
         </div>
     </section>
 
@@ -101,7 +172,7 @@ Anime Store Dakar
             <path data-scroll-stroke-path d="M705 45C600 120 745 232 610 287C506 329 407 210 332 291C247 382 424 479 321 563C230 637 108 582 82 690C49 827 249 897 399 838C576 768 781 857 750 1006C720 1150 489 1122 357 1070" />
         </svg>
 
-        <div class="container-page grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <div class="reveal container-page grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
                 <p class="eyebrow">Vision</p>
                 <h2 class="section-title mt-5">
@@ -122,7 +193,7 @@ Anime Store Dakar
 
     <section id="categories" class="section-page bg-white/60 dark:bg-white/5">
         <div class="container-page">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div class="reveal flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p class="eyebrow">Explorer</p>
                     <h2 class="section-title mt-4">
@@ -138,7 +209,7 @@ Anime Store Dakar
                 </a>
             </div>
 
-            <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="reveal-stagger mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 <article class="product-card">
                     <div class="media-frame aspect-[4/5] bg-brand-soft"></div>
                     <p class="badge badge-soft mt-4">Collection</p>
@@ -172,19 +243,19 @@ Anime Store Dakar
 
 
     <!-- =========================================================
-         PRODUITS
+         PRODUITS-NOUVEAUTÉS — Cover Flow 3D
          ========================================================= -->
 
     <section id="arrivals" class="section-page">
         <div class="container-page">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div class="reveal flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p class="eyebrow">Sélection</p>
                     <h2 class="section-title mt-4">
                         Nouveaux arrivages
                     </h2>
                     <p class="section-subtitle">
-                        Un aperçu statique avant la création du vrai catalogue.
+                        Découvre les derniers produits ajoutés à la boutique.
                     </p>
                 </div>
 
@@ -193,38 +264,64 @@ Anime Store Dakar
                 </a>
             </div>
 
-            <div class="mt-8 grid gap-5 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
-                {% for product in featured_products %}
-                    <article class="product-card {% if forloop.first %}lg:row-span-2{% elif forloop.last %}lg:col-span-2{% endif %}">
-                        {% if forloop.last %}
-                            <div class="grid gap-4 sm:grid-cols-[0.7fr_1.3fr] sm:items-center">
-                                <div class="media-frame flex aspect-square items-center justify-center {% if product.color == 'brand-dark' %}bg-brand-dark text-white{% elif product.color == 'brand' %}bg-brand text-brand-dark{% elif product.color == 'white' %}bg-white text-brand-dark dark:bg-white/10 dark:text-white{% else %}bg-brand-soft text-brand-dark{% endif %}">
-                                    <span class="font-display text-5xl font-bold">{{ product.style }}</span>
-                                </div>
-                                <div>
-                                    <p class="badge badge-primary">{{ product.badge }}</p>
-                                    <h3 class="mt-3 text-xl font-bold">{{ product.name }}</h3>
-                                    <p class="mt-2 text-sm leading-relaxed text-brand-dark/65 dark:text-white/65">Format horizontal utile pour les offres, bundles ou promotions saisonnières.</p>
-                                </div>
+            {% if latest_products %}
+            <div class="coverflow reveal mt-14" data-coverflow>
+                <div class="coverflow__viewport" data-coverflow-viewport>
+                    <div class="coverflow__stage" data-coverflow-stage>
+                        {% for product in latest_products %}
+                        <a
+                            href="{% url 'product_detail' product.slug %}"
+                            class="coverflow__card"
+                            data-coverflow-card
+                            data-base="{{ forloop.counter0 }}"
+                        >
+                            <div class="coverflow__visual
+                                {% if product.color == 'brand-dark' %}bg-brand-dark text-white
+                                {% elif product.color == 'brand' %}bg-brand text-brand-dark
+                                {% elif product.color == 'white' %}bg-white text-brand-dark dark:bg-white/10 dark:text-white
+                                {% else %}bg-brand-soft text-brand-dark dark:bg-white/5 dark:text-white{% endif %}">
+                                {% if product.image %}
+                                <img src="{% static product.image %}" alt="{{ product.name }}" loading="lazy">
+                                {% else %}
+                                <span class="font-display text-5xl font-bold">{{ product.style }}</span>
+                                {% endif %}
                             </div>
-                        {% else %}
-                            <div class="media-frame flex {% if forloop.first %}aspect-[4/3] lg:aspect-[4/4.2]{% else %}aspect-[4/3]{% endif %} items-center justify-center {% if product.color == 'brand-dark' %}bg-brand-dark text-white{% elif product.color == 'brand' %}bg-brand text-brand-dark{% elif product.color == 'white' %}bg-white text-brand-dark dark:bg-white/10 dark:text-white{% else %}bg-brand-soft text-brand-dark{% endif %}">
-                                <span class="font-display text-6xl font-bold">{{ product.style }}</span>
+                            <div class="coverflow__info">
+                                <p class="coverflow__category">{{ product.category }}</p>
+                                <h3 class="coverflow__name">{{ product.name }}</h3>
+                                <p class="coverflow__price">{{ product.price|floatformat:"0" }} FCFA</p>
                             </div>
-                            <div class="mt-5 flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="badge {% if forloop.first %}badge-primary{% else %}badge-soft{% endif %}">{{ product.badge }}</p>
-                                    <h3 class="mt-3 {% if forloop.first %}text-xl{% else %}text-lg{% endif %} font-bold">{{ product.name }}</h3>
-                                    {% if forloop.first %}
-                                        <p class="mt-2 text-sm leading-relaxed text-brand-dark/65 dark:text-white/65">Produit mis en avant avec plus d’espace, façon e-commerce premium.</p>
-                                    {% endif %}
-                                </div>
-                                <p class="font-bold">{{ product.price }} FCFA</p>
-                            </div>
-                        {% endif %}
-                    </article>
-                {% endfor %}
+                            {% if not product.stock %}
+                            <div class="coverflow__rupture">Rupture</div>
+                            {% endif %}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="coverflow__controls">
+                    <button type="button" class="coverflow__btn" data-coverflow-prev aria-label="Produit précédent">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+
+                    <div class="coverflow__indicator">
+                        <span data-coverflow-current>1</span>
+                        <span class="coverflow__indicator-sep">/</span>
+                        <span>{{ latest_products|length }}</span>
+                    </div>
+
+                    <button type="button" class="coverflow__btn" data-coverflow-next aria-label="Produit suivant">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <p class="coverflow__hint">Glisse ou utilise les flèches</p>
             </div>
+            {% endif %}
         </div>
     </section>
 
@@ -397,7 +494,7 @@ Anime Store Dakar
          ========================================================= -->
 
     <section id="experience" class="section-page bg-brand text-brand-dark dark:bg-white/5 dark:text-white">
-        <div class="container-page grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div class="reveal container-page grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
                 <p class="eyebrow text-brand-soft dark:text-brand-soft/70">Expérience</p>
                 <h2 class="section-title">
@@ -436,7 +533,7 @@ Anime Store Dakar
          ========================================================= -->
 
     <section id="galerie" class="section-page bg-white/60 dark:bg-white/5">
-        <div class="container-page grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+        <div class="reveal container-page grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
             <div class="grid grid-cols-2 gap-4">
                 <div class="media-frame aspect-square bg-brand"></div>
                 <div class="media-frame aspect-square bg-brand-dark"></div>
@@ -454,6 +551,51 @@ Anime Store Dakar
                 </p>
                 <a href="#" class="btn btn-primary mt-8">
                     Contacter la boutique
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =========================================================
+         ICÔNES SOCIALES — Suis-nous
+         ========================================================= -->
+
+    <section class="py-10 bg-brand-soft dark:bg-brand-dark">
+        <div class="container-page flex flex-col items-center gap-5">
+            <p class="text-xs font-bold uppercase tracking-[0.22em] text-brand-dark/50 dark:text-white/50">
+                Suis-nous
+            </p>
+
+            <div class="social-icons-row">
+                <a href="https://www.instagram.com/anime_store_dakar"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="social-icon social-icon--instagram"
+                   aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </a>
+
+                <a href="https://whatsapp.com/channel/0029VbAhcRxISTkSzdlbYE1z"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="social-icon social-icon--channel"
+                   aria-label="Canal WhatsApp">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                </a>
+
+                <a href="https://wa.me/221775958179?text=Bonjour%20Anime%20Store%20Dakar%20%F0%9F%91%8B"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="social-icon social-icon--whatsapp"
+                   aria-label="WhatsApp Direct">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
                 </a>
             </div>
         </div>

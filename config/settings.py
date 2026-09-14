@@ -29,6 +29,8 @@ DEBUG = os.environ.get("DEBUG", "True").lower() in ("1", "true", "yes")
 
 _allowed = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost")
 ALLOWED_HOSTS = [h.strip() for h in _allowed.split(",") if h.strip()]
+if "testserver" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append("testserver")
 
 # Autoriser les previews et le domaine de production Vercel
 if not DEBUG:
@@ -38,6 +40,38 @@ if not DEBUG:
 CSRF_TRUSTED_ORIGINS = [
     "https://*.vercel.app",
 ]
+
+# Headers de sécurité
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+
+
+# ---------------------------------------------------------------------------
+# SEO — Variables globales
+# ---------------------------------------------------------------------------
+# SITE_URL : URL canonique utilisée dans les balises OpenGraph, sitemap, etc.
+#   - En dev : http://127.0.0.1:8000
+#   - En prod : à définir via la variable d'environnement SITE_URL
+#     (ex: https://anime-store.vercel.app)
+
+SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000").rstrip("/")
+
+SITE_NAME = "Anime Store Dakar"
+
+# Image par défaut pour les partages sociaux (chemin relatif depuis /static/)
+SITE_DEFAULT_OG_IMAGE = "images/hero/hero-light.jpg"
+
+# Réseaux sociaux et contact
+SITE_INSTAGRAM = "https://www.instagram.com/anime_store_dakar"
+SITE_WHATSAPP_NUMBER = "221775958179"
+SITE_WHATSAPP = f"https://wa.me/{SITE_WHATSAPP_NUMBER}"
+
 
 
 # ---------------------------------------------------------------------------
@@ -51,6 +85,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
 
     "shop",
 ]
@@ -78,6 +113,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "shop.context_processors.seo_context",
             ],
         },
     },
@@ -109,10 +145,9 @@ if DATABASE_URL:
         conn_health_checks=True,
         ssl_require=True,
     )
+    # Le pooler Supabase (transaction mode, port 6543) ne supporte pas les prepared statements / cursors serveur.
+    DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 
-# Le pooler Supabase (transaction mode) ne supporte pas les prepared statements.
-# On les désactive pour éviter des erreurs aléatoires en production.
-DISABLE_SERVER_SIDE_CURSORS = True
 
 
 # ---------------------------------------------------------------------------

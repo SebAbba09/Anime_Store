@@ -154,6 +154,8 @@ class Order(models.Model):
                     seq = int(last.reference.rsplit("-", 1)[-1]) + 1
                 except (ValueError, IndexError):
                     seq = 1
+            while Order.objects.filter(reference=f"{prefix}{seq:04d}").exists():
+                seq += 1
             self.reference = f"{prefix}{seq:04d}"
         super().save(*args, **kwargs)
 

@@ -2,43 +2,19 @@
 |--------------------------------------------------------------------------
 | Anime Store Dakar — Panier Frontend (cart.js)
 |--------------------------------------------------------------------------
-|
-| Gestion complète du panier côté client :
-|   - Stockage persistant dans localStorage
-|   - Tiroir latéral (Cart Drawer)
-|   - Ajout / suppression / modification des quantités
-|   - Mini-formulaire client (nom + WhatsApp, optionnel)
-|   - Enregistrement serveur des commandes (Phase 11)
-|   - Vider le panier après validation WhatsApp + confirmation visuelle
-|   - Génération du message WhatsApp groupé & mono-produit
-|   - Toast de notification
-|
 */
-
-
-/* =========================================================================
-   CONSTANTES
-   ========================================================================= */
 
 const CART_STORAGE_KEY = "anime_store_cart";
 const CUSTOMER_STORAGE_KEY = "anime_store_customer";
-const WHATSAPP_NUMBER = "221771768690";
+const WHATSAPP_NUMBER = "221775958179";
 const API_ORDER_URL = "/api/orders/";
 
-
-/* =========================================================================
-   UTILITAIRES
-   ========================================================================= */
 
 function getCsrfToken() {
     const match = document.cookie.match(/(^|;\s*)csrftoken=([^;]+)/);
     return match ? decodeURIComponent(match[2]) : "";
 }
 
-
-/* =========================================================================
-   ÉTAT DU PANIER
-   ========================================================================= */
 
 function getCart() {
     try {
@@ -63,10 +39,6 @@ function getCartTotal() {
 }
 
 
-/* =========================================================================
-   ÉTAT CLIENT (nom + WhatsApp)
-   ========================================================================= */
-
 function getCustomer() {
     try {
         const raw = JSON.parse(localStorage.getItem(CUSTOMER_STORAGE_KEY)) || {};
@@ -83,10 +55,6 @@ function saveCustomer(customer) {
     localStorage.setItem(CUSTOMER_STORAGE_KEY, JSON.stringify(customer));
 }
 
-
-/* =========================================================================
-   ACTIONS PANIER
-   ========================================================================= */
 
 function addToCart(product, quantity = 1) {
     const cart = getCart();
@@ -108,7 +76,7 @@ function addToCart(product, quantity = 1) {
     }
 
     saveCart(cart);
-    showToast(`${product.name} ajouté au panier !`);
+    showToast(`${product.name} ajouté au panier !`, "success");
 }
 
 function removeFromCart(slug) {
@@ -138,10 +106,6 @@ function clearCart() {
 }
 
 
-/* =========================================================================
-   BADGES COMPTEUR (HEADER)
-   ========================================================================= */
-
 function updateCartBadges() {
     const count = getCartCount();
     const badges = document.querySelectorAll("[data-cart-count]");
@@ -159,47 +123,37 @@ function updateCartBadges() {
 
 
 /* =========================================================================
-   TOAST DE NOTIFICATION
+   SPRINT 1 — TOAST AMÉLIORÉ (barre de progression + type)
    ========================================================================= */
 
-function showToast(message) {
+function showToast(message, type = "success", duration = 2800) {
     const old = document.getElementById("cart-toast");
     if (old) old.remove();
 
     const toast = document.createElement("div");
     toast.id = "cart-toast";
-    toast.className = [
-        "fixed bottom-6 right-6 z-[9999]",
-        "flex items-center gap-3",
-        "rounded-2xl bg-brand-dark px-5 py-3.5",
-        "text-sm font-semibold text-white shadow-2xl",
-        "transition-all duration-500",
-        "translate-y-4 opacity-0",
-    ].join(" ");
+    toast.className = `toast toast-${type}`;
+
+    const iconSvg = type === "info"
+        ? `<svg class="toast-icon h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+        : `<svg class="toast-icon h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>`;
 
     toast.innerHTML = `
-        <svg class="h-5 w-5 shrink-0 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-        </svg>
-        <span>${message}</span>
+        ${iconSvg}
+        <span class="flex-1">${message}</span>
+        <span class="toast-progress" style="animation-duration: ${duration}ms;"></span>
     `;
 
     document.body.appendChild(toast);
 
-    requestAnimationFrame(() => {
-        toast.classList.remove("translate-y-4", "opacity-0");
-    });
+    requestAnimationFrame(() => toast.classList.add("visible"));
 
     setTimeout(() => {
-        toast.classList.add("translate-y-4", "opacity-0");
+        toast.classList.remove("visible");
         setTimeout(() => toast.remove(), 500);
-    }, 2800);
+    }, duration);
 }
 
-
-/* =========================================================================
-   TIROIR LATÉRAL (CART DRAWER)
-   ========================================================================= */
 
 function openCartDrawer() {
     const drawer = document.getElementById("cart-drawer");
@@ -210,6 +164,7 @@ function openCartDrawer() {
 
     drawer.classList.remove("hidden");
     document.body.style.overflow = "hidden";
+    document.body.classList.add("cart-open");
 
     requestAnimationFrame(() => {
         overlay.classList.add("opacity-100");
@@ -226,6 +181,7 @@ function closeCartDrawer() {
 
     overlay.classList.remove("opacity-100");
     panel.classList.add("translate-x-full");
+    document.body.classList.remove("cart-open");
 
     setTimeout(() => {
         drawer.classList.add("hidden");
@@ -233,13 +189,6 @@ function closeCartDrawer() {
     }, 300);
 }
 
-
-/* =========================================================================
-   MINI-FORMULAIRE CLIENT (injecté dynamiquement dans le drawer)
-   ------------------------------------------------------------------------
-   Pour le retirer : supprimer l'appel `ensureCustomerForm(footer)`
-   dans renderCartDrawer + la fonction ensureCustomerForm ci-dessous.
-   ========================================================================= */
 
 function ensureCustomerForm(footer) {
     if (!footer) return;
@@ -254,22 +203,10 @@ function ensureCustomerForm(footer) {
         <p class="text-xs font-semibold uppercase tracking-wide text-brand-dark/50 dark:text-white/50">
             Vos coordonnées (optionnel)
         </p>
-        <input
-            type="text"
-            id="cart-customer-name"
-            placeholder="Votre nom"
-            maxlength="120"
-            autocomplete="name"
-            class="w-full rounded-lg border border-brand-dark/15 bg-white/70 px-3 py-2 text-sm text-brand-dark placeholder-brand-dark/40 focus:border-brand focus:outline-none dark:border-white/15 dark:bg-white/5 dark:text-white dark:placeholder-white/40"
-        >
-        <input
-            type="tel"
-            id="cart-customer-whatsapp"
-            placeholder="Votre numéro WhatsApp"
-            maxlength="30"
-            autocomplete="tel"
-            class="w-full rounded-lg border border-brand-dark/15 bg-white/70 px-3 py-2 text-sm text-brand-dark placeholder-brand-dark/40 focus:border-brand focus:outline-none dark:border-white/15 dark:bg-white/5 dark:text-white dark:placeholder-white/40"
-        >
+        <input type="text" id="cart-customer-name" placeholder="Votre nom" maxlength="120" autocomplete="name"
+            class="w-full rounded-lg border border-brand-dark/15 bg-white/70 px-3 py-2 text-sm text-brand-dark placeholder-brand-dark/40 focus:border-brand focus:outline-none dark:border-white/15 dark:bg-white/5 dark:text-white dark:placeholder-white/40">
+        <input type="tel" id="cart-customer-whatsapp" placeholder="Votre numéro WhatsApp" maxlength="30" autocomplete="tel"
+            class="w-full rounded-lg border border-brand-dark/15 bg-white/70 px-3 py-2 text-sm text-brand-dark placeholder-brand-dark/40 focus:border-brand focus:outline-none dark:border-white/15 dark:bg-white/5 dark:text-white dark:placeholder-white/40">
     `;
 
     footer.insertBefore(form, footer.firstChild);
@@ -280,10 +217,6 @@ function ensureCustomerForm(footer) {
     if (waInput) waInput.value = customer.whatsapp;
 }
 
-
-/* =========================================================================
-   RENDU DU DRAWER
-   ========================================================================= */
 
 function renderCartDrawer() {
     const container = document.getElementById("cart-items");
@@ -340,19 +273,15 @@ function renderCartDrawer() {
                 </div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <button
-                            type="button"
+                        <button type="button"
                             class="flex h-7 w-7 items-center justify-center rounded-full border border-brand-dark/20 text-sm font-bold transition hover:bg-brand-dark hover:text-white dark:border-white/20 dark:hover:bg-white dark:hover:text-brand-dark"
                             onclick="updateQuantity('${item.slug}', ${item.quantity - 1})"
-                            aria-label="Diminuer la quantité"
-                        >−</button>
+                            aria-label="Diminuer la quantité">−</button>
                         <span class="min-w-[1.5rem] text-center text-sm font-bold">${item.quantity}</span>
-                        <button
-                            type="button"
+                        <button type="button"
                             class="flex h-7 w-7 items-center justify-center rounded-full border border-brand-dark/20 text-sm font-bold transition hover:bg-brand-dark hover:text-white dark:border-white/20 dark:hover:bg-white dark:hover:text-brand-dark"
                             onclick="updateQuantity('${item.slug}', ${item.quantity + 1})"
-                            aria-label="Augmenter la quantité"
-                        >+</button>
+                            aria-label="Augmenter la quantité">+</button>
                     </div>
                     <p class="text-sm font-bold text-brand-dark dark:text-white">
                         ${(item.price * item.quantity).toLocaleString("fr-FR")} F
@@ -360,12 +289,10 @@ function renderCartDrawer() {
                 </div>
             </div>
 
-            <button
-                type="button"
+            <button type="button"
                 class="self-start rounded-full p-1 text-brand-dark/30 transition hover:text-red-500 dark:text-white/30 dark:hover:text-red-400"
                 onclick="removeFromCart('${item.slug}')"
-                aria-label="Retirer ${item.name}"
-            >
+                aria-label="Retirer ${item.name}">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
@@ -373,10 +300,8 @@ function renderCartDrawer() {
         </div>
     `).join("");
 
-    /* Mini-formulaire client (optionnel) */
     ensureCustomerForm(footer);
 
-    /* Pied de drawer */
     const totalEl = document.getElementById("cart-total");
     const countEl = document.getElementById("cart-footer-count");
     const whatsappEl = document.getElementById("cart-whatsapp-btn");
@@ -389,10 +314,6 @@ function renderCartDrawer() {
     }
 }
 
-
-/* =========================================================================
-   GÉNÉRATION DU MESSAGE WHATSAPP (PANIER GROUPÉ)
-   ========================================================================= */
 
 function generateWhatsAppUrl() {
     const cart = getCart();
@@ -419,11 +340,6 @@ function generateWhatsAppUrl() {
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-
-/* =========================================================================
-   GÉNÉRATION DU MESSAGE WHATSAPP (MONO-PRODUIT)
-   ========================================================================= */
-
 function generateSingleWhatsAppUrl({ name, price, quantity }) {
     const total = price * quantity;
     const message = [
@@ -438,10 +354,6 @@ function generateSingleWhatsAppUrl({ name, price, quantity }) {
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-
-/* =========================================================================
-   ENREGISTREMENT SERVEUR DES COMMANDES (Phase 11)
-   ========================================================================= */
 
 function postOrder(payload) {
     fetch(API_ORDER_URL, {
@@ -469,40 +381,29 @@ function submitCartOrder() {
     const cart = getCart();
     if (cart.length === 0) return;
 
-    /* 1. Construire l'URL WhatsApp AVANT de vider le panier */
     const whatsappUrl = generateWhatsAppUrl();
-
-    /* 2. Ouvrir WhatsApp immédiatement (compatible bloqueurs de popups) */
     window.open(whatsappUrl, "_blank");
 
-    /* 3. Enregistrer la commande côté serveur (fire & forget) */
     const customer = getCustomer();
     postOrder({
-        items: cart.map(item => ({
-            slug: item.slug,
-            quantity: item.quantity,
-        })),
+        items: cart.map(item => ({ slug: item.slug, quantity: item.quantity })),
         customer_name: customer.name,
         customer_whatsapp: customer.whatsapp,
     });
 
-    /* 4. Vider le panier, fermer le drawer, confirmer visuellement */
     clearCart();
     closeCartDrawer();
-    showToast("Commande envoyée sur WhatsApp ✅");
+    showToast("Commande envoyée sur WhatsApp ✅", "success");
 }
 
 function submitSingleOrder(btn) {
-    const qtyInput = document.getElementById(
-        btn.dataset.quantityInput || "product-quantity"
-    );
+    const qtyInput = document.getElementById(btn.dataset.quantityInput || "product-quantity");
     const qty = qtyInput ? Math.max(1, parseInt(qtyInput.value, 10) || 1) : 1;
 
     const slug = btn.dataset.slug || "";
     const name = btn.dataset.name || "";
     const price = parseInt(btn.dataset.price, 10) || 0;
 
-    /* Message WhatsApp reconstruit côté client avec la quantité choisie */
     let whatsappUrl = btn.getAttribute("href") || "#";
     if (slug && name && price) {
         whatsappUrl = generateSingleWhatsAppUrl({ name, price, quantity: qty });
@@ -517,19 +418,14 @@ function submitSingleOrder(btn) {
         customer_whatsapp: customer.whatsapp,
     });
 
-    showToast("Commande envoyée sur WhatsApp ✅");
+    showToast("Commande envoyée sur WhatsApp ✅", "success");
 }
 
-
-/* =========================================================================
-   GESTION DES CLICS — AJOUT AU PANIER
-   ========================================================================= */
 
 function initializeCart() {
     updateCartBadges();
     renderCartDrawer();
 
-    /* Sauvegarde live des champs client */
     document.addEventListener("input", (e) => {
         if (e.target.id === "cart-customer-name") {
             const c = getCustomer();
@@ -543,13 +439,11 @@ function initializeCart() {
         }
     });
 
-    /* Clics globaux */
     document.addEventListener("click", (e) => {
-        /* Ajout rapide (catalogue) */
         const addBtn = e.target.closest("[data-add-to-cart]");
         if (addBtn) {
             e.preventDefault();
-            const product = {
+            addToCart({
                 slug: addBtn.dataset.slug,
                 name: addBtn.dataset.name,
                 price: parseInt(addBtn.dataset.price, 10),
@@ -557,18 +451,16 @@ function initializeCart() {
                 image: addBtn.dataset.image || "",
                 style: addBtn.dataset.style || "",
                 color: addBtn.dataset.color || "",
-            };
-            addToCart(product, 1);
+            }, 1);
             return;
         }
 
-        /* Ajout depuis fiche produit */
         const addDetailBtn = e.target.closest("[data-add-to-cart-detail]");
         if (addDetailBtn) {
             e.preventDefault();
             const qtyInput = document.getElementById("product-quantity");
             const qty = qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
-            const product = {
+            addToCart({
                 slug: addDetailBtn.dataset.slug,
                 name: addDetailBtn.dataset.name,
                 price: parseInt(addDetailBtn.dataset.price, 10),
@@ -576,13 +468,11 @@ function initializeCart() {
                 image: addDetailBtn.dataset.image || "",
                 style: addDetailBtn.dataset.style || "",
                 color: addDetailBtn.dataset.color || "",
-            };
-            addToCart(product, qty);
+            }, qty);
             openCartDrawer();
             return;
         }
 
-        /* Mono-produit (fiche produit) : WhatsApp + enregistrement */
         const singleBtn = e.target.closest("[data-order-single]");
         if (singleBtn) {
             e.preventDefault();
@@ -590,7 +480,6 @@ function initializeCart() {
             return;
         }
 
-        /* Bouton WhatsApp du drawer : enregistrer + ouvrir WhatsApp */
         const waBtn = e.target.closest("[data-cart-whatsapp]");
         if (waBtn) {
             e.preventDefault();
@@ -598,32 +487,27 @@ function initializeCart() {
             return;
         }
 
-        /* Toggle drawer */
         if (e.target.closest("[data-cart-toggle]")) {
             e.preventDefault();
             openCartDrawer();
             return;
         }
 
-        /* Fermer drawer */
         if (e.target.closest("[data-cart-close]") || e.target.id === "cart-overlay") {
             closeCartDrawer();
             return;
         }
 
-        /* Vider le panier */
         if (e.target.closest("[data-cart-clear]")) {
             clearCart();
             return;
         }
     });
 
-    /* Fermeture avec Escape */
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeCartDrawer();
     });
 
-    /* Sélecteur de quantité (fiche produit) */
     document.addEventListener("click", (e) => {
         const qtyBtn = e.target.closest("[data-qty-change]");
         if (!qtyBtn) return;
@@ -633,14 +517,8 @@ function initializeCart() {
         if (!input) return;
 
         const delta = parseInt(qtyBtn.dataset.qtyChange, 10);
-        const newVal = Math.max(1, parseInt(input.value, 10) + delta);
-        input.value = newVal;
+        input.value = Math.max(1, parseInt(input.value, 10) + delta);
     });
 }
-
-
-/* =========================================================================
-   INITIALISATION AU CHARGEMENT
-   ========================================================================= */
 
 document.addEventListener("DOMContentLoaded", initializeCart);

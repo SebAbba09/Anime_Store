@@ -1,7 +1,43 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ product.name }} — Anime Store Dakar{% endblock %}
+{% block title %}{{ product.name }} — {{ product.price|floatformat:"0" }} FCFA | Anime Store Dakar{% endblock %}
+
+{% block meta_description %}{{ product.name }} à {{ product.price|floatformat:"0" }} FCFA. {{ product.description|truncatechars:120 }} Commande rapide sur WhatsApp.{% endblock %}
+
+{% block og_type %}product{% endblock %}
+
+{% block og_title %}{{ product.name }} — {{ product.price|floatformat:"0" }} FCFA{% endblock %}
+
+{% block og_description %}{{ product.description|truncatechars:160 }}{% endblock %}
+
+{% block og_image %}{% if product.image %}{{ SITE_URL }}/static/{{ product.image }}{% else %}{{ SITE_URL }}/static/{{ SITE_DEFAULT_OG_IMAGE }}{% endif %}{% endblock %}
+
+{% block twitter_image %}{% if product.image %}{{ SITE_URL }}/static/{{ product.image }}{% else %}{{ SITE_URL }}/static/{{ SITE_DEFAULT_OG_IMAGE }}{% endif %}{% endblock %}
+
+{% block schema_extra %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ product.name|escapejs }}",
+    "description": "{{ product.description|truncatechars:300|escapejs }}",
+    "category": "{{ product.category|escapejs }}",
+    "image": "{% if product.image %}{{ SITE_URL }}/static/{{ product.image }}{% else %}{{ SITE_URL }}/static/{{ SITE_DEFAULT_OG_IMAGE }}{% endif %}",
+    "brand": {
+        "@type": "Brand",
+        "name": "{{ SITE_NAME }}"
+    },
+    "offers": {
+        "@type": "Offer",
+        "price": "{{ product.price }}",
+        "priceCurrency": "XOF",
+        "availability": "{% if product.stock %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+        "url": "{{ SITE_URL }}{% url 'product_detail' product.slug %}"
+    }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 
@@ -235,7 +271,7 @@
                             Produit en rupture de stock
                         </button>
                         <a
-                            href="https://wa.me/221771768690?text=Bonjour%20%F0%9F%91%8B%20je%20voudrais%20être%20prévenu(e)%20quand%20{{ product.name|urlencode }}%20sera%20de%20retour%20en%20stock."
+                            href="https://wa.me/221775958179?text=Bonjour%20%F0%9F%91%8B%20je%20voudrais%20être%20prévenu(e)%20quand%20{{ product.name|urlencode }}%20sera%20de%20retour%20en%20stock."
                             target="_blank"
                             rel="noopener noreferrer"
                             class="btn btn-secondary w-full justify-center"

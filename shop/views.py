@@ -1,9 +1,11 @@
 import json
 import urllib.parse
 
+from django.conf import settings
+from django.db import transaction
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
@@ -21,12 +23,21 @@ def home(request):
         .filter(stock=True)
         .order_by("-popularity", "name")[:4]
     )
+
+    latest_products = (
+        Product.objects
+        .filter(stock=True)
+        .order_by("-id")[:6]
+    )
+
     return render(
         request,
         "home.html",
-        {"featured_products": featured_products},
+        {
+            "featured_products": featured_products,
+            "latest_products": latest_products,
+        },
     )
-
 
 @ensure_csrf_cookie
 def catalog(request):
@@ -99,7 +110,7 @@ def product_detail(request, slug):
         )
         suggestions = list(suggestions) + list(extra)
 
-    whatsapp_number = "221771768690"
+    whatsapp_number = getattr(settings, "SITE_WHATSAPP_NUMBER", "221775958179")
     whatsapp_message = (
         f"Bonjour Anime Store Dakar 👋\n"
         f"Je suis intéressé(e) par le produit suivant :\n"
@@ -129,7 +140,7 @@ def about(request):
 
 @ensure_csrf_cookie
 def contact(request):
-    whatsapp_number = "221771768690"
+    whatsapp_number = getattr(settings, "SITE_WHATSAPP_NUMBER", "221775958179")
     whatsapp_message = "Bonjour Anime Store Dakar 👋\nJ'ai une question pour vous :"
     whatsapp_url = (
         f"https://wa.me/{whatsapp_number}"
@@ -170,14 +181,15 @@ def create_order(request):
     customer_whatsapp = (payload.get("customer_whatsapp") or "").strip()[:30]
 
     slugs = [str(i.get("slug", "")).strip() for i in items if i.get("slug")]
-    products = {p.slug: p for p in Product.objects.filter(slug__in=slugs)}
+    if not slugs:
+        return JsonResponse({"ok": False, "error": "Aucun identifiant produit valide"}, status=400)
 
-    order = Order.objects.create(
-        customer_name=customer_name,
-        customer_whatsapp=customer_whatsapp,
-        total=0,
-    )
+    products = {p.slug: p for p in Product.objects.filter(slug__in=slugs, is_available=True)}
+    if not products:
+        return JsonResponse({"ok": False, "error": "Aucun produit disponible trouvé"}, status=400)
 
+    # Pré-validation et calcul
+    order_items_data = []
     total = 0
     for item in items:
         slug = str(item.get("slug", "")).strip()
@@ -192,18 +204,28 @@ def create_order(request):
         if qty < 1:
             qty = 1
 
-        OrderItem.objects.create(
-            order=order,
-            product=product,
-            product_name=product.name,
-            product_slug=product.slug,
-            quantity=qty,
-            unit_price=product.price,
-        )
+        order_items_data.append((product, qty))
         total += product.price * qty
 
-    order.total = total
-    order.save(update_fields=["total"])
+    if not order_items_data or total <= 0:
+        return JsonResponse({"ok": False, "error": "Aucun article commandable"}, status=400)
+
+    with transaction.atomic():
+        order = Order.objects.create(
+            customer_name=customer_name,
+            customer_whatsapp=customer_whatsapp,
+            total=total,
+        )
+
+        for product, qty in order_items_data:
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                product_name=product.name,
+                product_slug=product.slug,
+                quantity=qty,
+                unit_price=product.price,
+            )
 
     return JsonResponse({
         "ok": True,

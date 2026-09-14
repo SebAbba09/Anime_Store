@@ -1,222 +1,170 @@
-# Compte rendu global - Anime Store Dakar
+# Compte Rendu Global & Rapport d'Audit — Anime Store Dakar
 
-Ce document est le point de reprise officiel du projet. Il peut être copié-collé intégralement dans une autre conversation (ChatGPT, Claude, Codex, etc.) pour reprendre le travail exactement là où il s'est arrêté, sans rien perdre ni repartir de zéro.
+Ce document est le document de référence et le point de reprise officiel du projet **Anime Store Dakar**. Il consigne l'état des lieux complet, les nettoyages, les corrections de bugs, les mesures de sécurité appliquées, les instructions de déploiement et la feuille de route d'évolution.
 
-Dernière mise à jour : 12 septembre 2026
-
----
-
-## 1. Contexte global du projet
-
-**Anime Store Dakar** est une boutique e-commerce vitrine moderne pour une enseigne basée à Dakar (Sénégal), spécialisée dans la pop culture japonaise, les mangas et l\'univers Otaku.
-
-### Objectifs du projet
-- **Positionnement :** Crédible commercialement, chaleureux, haut de gamme, pensé pour le marché sénégalais (prix en FCFA, contact direct WhatsApp, communauté Instagram).
-- **Produits vendus :** Figurines collector, vêtements (haoris, t-shirts oversize), tomes & éditions spéciales de mangas, accessoires (colliers, bagues, porte-clés, goodies).
-
-### Coordonnées et réseaux intégrés
-- **Numéro WhatsApp de contact / commande :** +221 77 176 86 90
-- **Lien chaîne / canal WhatsApp :** https://whatsapp.com/channel/0029VbAhcRxISTkSzdlbYE1z
-- **Compte Instagram officiel :** https://www.instagram.com/anime_store_dakar (@anime_store_dakar)
-- **Dépôt GitHub public :** https://github.com/SebAbba09/Anime_Store
+**Dernière mise à jour :** 14 septembre 2026  
+**Statut global :** Production-Ready (Phases 0 à 14 complètes)
 
 ---
 
-## 2. Emplacement et environnement local
+## 1. Contexte Global du Projet
 
-- **Chemin local :** D:\\Download\\Anime_Store
-- **Système d\'exploitation :** Windows 11
-- **Shell recommandé :** PowerShell
-- **Environnement virtuel Python actif :** .\\venv\\Scripts\\python.exe
-- **Dépôt Git :** Branche main synchronisée avec origin/main
+**Anime Store Dakar** est une boutique e-commerce vitrine moderne et haut de gamme dédiée à la pop culture japonaise, aux mangas et à l'univers Otaku, spécialement conçue pour le marché sénégalais (Dakar).
 
-### Stack technique
-- **Backend :** Python 3.14.4, Django 5.2.17
-- **Frontend CSS :** Tailwind CSS v4.3.3 (compilé via @tailwindcss/cli), Vanilla CSS design system
-- **Frontend JS :** JavaScript natif ES6+ (module cart.js pour le panier et l'envoi API, main.js pour thème & animations)
-- **Base de données actuelle :** PostgreSQL distant hébergé sur **Supabase** via psycopg 3.2.13 (avec fallback SQLite en local sans .env), 4 catégories et 23 produits peuplés
-- **Gestion des statiques :** WhiteNoise avec compression (CompressedStaticFilesStorage)
-- **Déploiement cible :** Vercel (ercel.json, uild_files.sh, 
-equirements.txt)
+### Positionnement & Objectifs
+- **Crédibilité commerciale :** Tarification transparente en Francs CFA (XOF), service client réactif via WhatsApp, communauté engagée sur Instagram.
+- **Catalogue produits :** Figurines collector officielles, vêtements streetwear Otaku (haoris, t-shirts oversize), mangas et éditions collector, accessoires japonais (colliers, bagues, porte-clés).
+- **Parcours d'achat adapté :** Panier fluide avec constitution de commande groupée et finalisation directe sur WhatsApp (canal d'achat n°1 au Sénégal).
+
+### Coordonnées et Liens Officiels
+- **Numéro WhatsApp officiel de commande :** `+221 77 595 81 79` (lien direct : [https://wa.me/221775958179](https://wa.me/221775958179))
+- **Canal WhatsApp officiel :** [https://whatsapp.com/channel/0029VbAhcRxISTkSzdlbYE1z](https://whatsapp.com/channel/0029VbAhcRxISTkSzdlbYE1z)
+- **Compte Instagram :** [https://www.instagram.com/anime_store_dakar](https://www.instagram.com/anime_store_dakar) (`@anime_store_dakar`)
+- **Dépôt GitHub :** [https://github.com/SebAbba09/Anime_Store](https://github.com/SebAbba09/Anime_Store)
+- **Déploiement Vercel :** [https://anime-store-dakar.vercel.app](https://anime-store-dakar.vercel.app) *(ou alias du projet)*
 
 ---
 
-## 3. État technique actuel
+## 2. Stack Technique & Environnement
 
-Le projet est stable, fonctionnel, connecté à la base PostgreSQL Supabase via l\'ORM Django, et passe tous les contrôles d\'intégrité sans aucune erreur.
+- **Système d'exploitation :** Windows 11 / Linux (production Vercel)
+- **Backend :** Python 3.14 (local) / Python 3.12 (Vercel runtime), Django 5.2.17
+- **Base de données :** PostgreSQL hébergé sur **Supabase** (avec fallback automatique SQLite en local), piloté via `psycopg 3` (`psycopg[binary]>=3.1.18`) et `dj-database-url`.
+- **Frontend CSS :** Tailwind CSS v4.3.3 compilé via `@tailwindcss/cli`, tokens de design personnalisés (`brand`, `brand-dark`, `brand-soft`).
+- **Frontend JS :** JavaScript natif ES6+ modulaire :
+  - `static/js/cart.js` : gestion complète du panier (`localStorage`), drawer latéral, badge dynamique, envoi asynchrone `/api/orders/`, intégration WhatsApp.
+  - `static/js/main.js` : Dark mode, navigation spotlight, scroll reveal, accords FAQ, parallaxe, tilt 3D, flip-fade text et coverflow 3D.
+- **Fichiers Statiques :** WhiteNoise avec compression et hachage (`CompressedStaticFilesStorage`).
+- **Déploiement :** Vercel Serverless WSGI (`@vercel/python`) avec pipeline de build automatisé (`build_files.sh`).
 
-### Routes fonctionnelles
-| Route | Vue (shop/views.py) | Template / Type | Description |
+---
+
+## 3. État des Lieux & Synthèse des Actions Entreprises
+
+### État Initial
+- Projet fonctionnel en local et connecté à Supabase, mais comportant des anomalies bloquantes pour la production :
+  - Un bug d'imbrication de balise template cassant le HTML et les métadonnées SEO Schema.org.
+  - Une mauvaise déclaration de l'option de désactivation des curseurs Supabase au niveau du module `settings.py`.
+  - Des commandes "fantômes" (total 0 FCFA) pouvant être persistées lors de requêtes avec articles invalides.
+  - Absence de script de build pour la collecte des statiques sur Vercel.
+  - Ancien numéro de téléphone non uniforme dispersé dans les templates et les scripts.
+
+### Actions Entreprises
+1. **Correction des bugs bloquants** (SEO, base de données, concurrence, validation).
+2. **Nettoyage complet** des fichiers résiduels (`main.py`, `.backup`).
+3. **Remplacement systématique du numéro de contact** par `+221 77 595 81 79` (`221775958179`) dans l'ensemble des fichiers (Python, templates HTML, JavaScript).
+4. **Renforcement de la sécurité** (headers HTTP, validation des payloads, atomicité des transactions).
+5. **Préparation Vercel** (`build_files.sh`, `vercel.json`, `requirements.txt`).
+6. **Tests et vérification automatisée** de l'ensemble des routes et des fonctionnalités API.
+
+---
+
+## 4. Détail Exhaustif des Corrections & Mesures Appliquées
+
+### A. Nettoyages et Ajustements Effectués
+- **Suppression des fichiers orphelins :** Suppression du fichier modèle PyCharm `main.py` et des sauvegardes temporaires (`input.css.backup`).
+- **Uniformisation des variables de configuration :** Centralisation de `SITE_WHATSAPP_NUMBER = "221775958179"` dans `config/settings.py` et transmission globale via `shop/context_processors.py`.
+- **Harmonisation des dépendances dans `requirements.txt` :** Remplacement de `psycopg2-binary` par `psycopg[binary]==3.2.13` (Psycopg v3) et ajout explicite de `pillow==12.3.0` correspondant exactement à l'environnement d'exécution.
+- **Nettoyage des décorateurs dans `shop/views.py` :** Suppression du doublon `@ensure_csrf_cookie` sur la vue `home`.
+
+### B. Bugs Corrigés et Améliorations Apportées
+1. **Correction de la balise `twitter_image` et `schema_extra` (`templates/product.html`) :**
+   - *Cause :* Le bloc `{% block schema_extra %}` était imbriqué à l'intérieur de `{% block twitter_image %}` sans fermeture préalable.
+   - *Effet néfaste :* L'intégralité du `<script type="application/ld+json">` était injectée dans l'attribut HTML `content=""` de la meta Twitter Card de `base.html`, corrompant le DOM et laissant le bloc Schema.org vide.
+   - *Résolution :* Fermeture immédiate de `{% block twitter_image %}` par `{% endblock %}` avant la déclaration indépendante de `{% block schema_extra %}`.
+2. **Prise en compte des curseurs Supabase dans `config/settings.py` :**
+   - *Cause :* `DISABLE_SERVER_SIDE_CURSORS = True` était déclaré au niveau racine du module.
+   - *Effet néfaste :* Django ignore les variables de module ; le pooler PgBouncer de Supabase (port 6543 en mode transaction) aurait planté lors de requêtes préparées.
+   - *Résolution :* Configuration directe dans le dictionnaire de base de données : `DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True`.
+3. **Élimination des commandes fantômes dans `shop/views.py` :**
+   - *Cause :* `Order.objects.create(...)` était appelé avant l'itération et la validation des slugs produits.
+   - *Résolution :* Validation préalable de l'existence des produits et de leur disponibilité (`is_available=True`), calcul préalable du montant total, et rejet avec HTTP 400 si le panier est vide ou invalide.
+4. **Atomicité des commandes (`django.db.transaction`) :**
+   - *Résolution :* Enveloppement de la création de la commande et de ses `OrderItem` dans `with transaction.atomic():` pour garantir qu'aucune commande incomplète ne peut être enregistrée en cas d'erreur.
+5. **Prévention des collisions de référence de commande (`shop/models.py`) :**
+   - *Résolution :* Ajout d'une boucle de vérification d'unicité avant l'attribution finale de `CMD-AAAAMMJJ-XXXX` dans `Order.save()`.
+6. **URLs HTTPS dans les Sitemaps (`shop/sitemaps.py`) :**
+   - *Résolution :* Ajout de `protocol = "https"` sur `StaticViewSitemap`, `CategorySitemap` et `ProductSitemap`.
+
+### C. Mesures de Sécurité Mises en Place
+- **Protection des variables sensibles :** Maintien strict de `.env`, `db.sqlite3` et `staticfiles/` dans `.gitignore`. Aucune clé secrète n'est exposée dans les templates ni dans le dépôt Git.
+- **En-têtes de sécurité HTTP ajoutés dans `config/settings.py` :**
+  - `SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")` : détection fiable du protocole sécurisé derrière le reverse-proxy Vercel.
+  - `SECURE_CONTENT_TYPE_NOSNIFF = True` : protection contre le reniflage MIME.
+  - `X_FRAME_OPTIONS = "DENY"` : protection absolue contre le clickjacking.
+  - En production (`DEBUG = False`) : activation automatique de `SESSION_COOKIE_SECURE = True` et `CSRF_COOKIE_SECURE = True`.
+- **Validation stricte des entrées utilisateur :**
+  - Troncature et assainissement des champs `customer_name` (120 car.) et `customer_whatsapp` (30 car.).
+  - Validation et forçage de la quantité (`qty >= 1`).
+  - Échappement des caractères spéciaux dans les JSON-LD (`escapejs`).
+
+---
+
+## 5. Recommandations pour le Futur
+
+### 🎨 Recommandations Visuelles & UX
+- **Formats d'image Next-Gen (WebP/AVIF) :** Convertir les images produits JPG/PNG en WebP compressé pour accélérer le chargement mobile sur les connexions 4G à Dakar.
+- **Skeleton Loaders :** Ajouter des placeholders animés lors du chargement des images dans la galerie et le catalogue.
+- **Indicateur de stock visuel :** Afficher un badge "Plus que 2 exemplaires" lorsque le stock est faible pour créer un sentiment d'urgence d'achat.
+
+### ⚙️ Recommandations Fonctionnelles
+- **Paiement mobile local (Wave & Orange Money) :** Intégrer une passerelle de paiement sénégalaise (ex : PayTech Sénégal, CinetPay ou Wave Business API) en complément du contact WhatsApp.
+- **Recherche prédictive (Autocomplete) :** Connecter l'overlay de recherche (Ctrl+K) à un endpoint d'autocomplétion renvoyant des aperçus instantanés avec image et prix.
+- **Gestion des avis clients :** Permettre aux clients ayant reçu leur commande d'ajouter un avis avec note sur la fiche produit.
+
+### 🛡️ Recommandations de Sécurité
+- **Rate-Limiting sur `/api/orders/` :** Mettre en place `django-ratelimit` pour limiter le nombre de requêtes POST par minute par adresse IP et prévenir tout abus.
+- **Monitoring Sentry :** Ajouter le SDK `sentry-sdk` pour être notifié instantanément en cas d'erreur 500 en production sur Vercel.
+- **Rotation de `SECRET_KEY` :** S'assurer que la clé utilisée sur Vercel est distincte et générée aléatoirement via `django.core.management.utils.get_random_secret_key()`.
+
+---
+
+## 6. Étapes de Maintenance Régulière
+
+1. **Sauvegardes de la base Supabase :** Vérifier que les backups automatiques quotidiens sont actifs dans le tableau de bord Supabase.
+2. **Mises à jour de sécurité des dépendances :** Exécuter périodiquement `pip list --outdated` et tester les mises à jour mineures de Django et Psycopg.
+3. **Contrôle des statiques WhiteNoise :** Après chaque modification de feuille de style, exécuter `npm run build:css` puis `python manage.py collectstatic --noinput`.
+4. **Vérification de l'indexation Google Search Console :** Soumettre `https://<domaine>/sitemap.xml` dans Google Search Console pour surveiller la couverture des pages et la validité des données Schema.org.
+
+---
+
+## 7. Tableau Récapitulatif des Phases
+
+| Phase | Intitulé | Statut | Synthèse |
 |---|---|---|---|
-| / | home | 	emplates/home.html | Accueil immersive (Hero, Stats, Vision, Parallax, Nouveautés, CTA) |
-| /boutique/ | catalog | 	emplates/catalog.html | Catalogue dynamique branché à PostgreSQL (recherche multi-critères, catégories, tri, stock, ajout direct panier) |
-| /boutique/<slug>/ | product_detail | 	emplates/product.html | Fiche produit dynamique (galerie, détails, stock, tags, sélecteur quantité, ajout panier, commande directe WhatsApp) |
-| /a-propos/ | bout | 	emplates/about.html | Histoire de la boutique, engagements qualité, chiffres clés, valeurs |
-| /contact/ | contact | 	emplates/contact.html | Hub de contact (WhatsApp direct, chaîne WhatsApp, Instagram, FAQ accordéon) |
-| /api/orders/ | create_order | API JSON (POST) | Enregistrement automatique des commandes en base avant ouverture de WhatsApp |
-| /admin/ | Admin Django | Interface Django | Administration complète pour Category, Product, Order et OrderItem |
+| **Phase 0** | Cadrage et identité | **Terminée** | Palette `#6491A6` / `#1F2235`, univers Otaku haut de gamme. |
+| **Phase 1** | Initialisation Django | **Terminée** | Architecture Django 5.2, modularité application `shop`. |
+| **Phase 2** | Design system Tailwind v4 | **Terminée** | `input.css` avec design tokens, mode sombre/clair, classes utilitaires. |
+| **Phase 3** | Layout global | **Terminée** | `base.html`, navigation responsive, footer, drawer panier, dark mode. |
+| **Phase 4** | Homepage | **Terminée** | Sections immersives, coverflow, parallaxe, CTA WhatsApp. |
+| **Phase 5** | Catalogue dynamique | **Terminée** | Filtres multi-critères, recherche, tri, gestion du stock. |
+| **Phase 6** | Fiche produit dynamique | **Terminée** | Galerie, sélecteur de quantité, suggestions, Schema.org corrigé. |
+| **Phase 7** | Pages secondaires | **Terminée** | Pages `/a-propos/` (Team reveal, flip-fade) et `/contact/` (FAQ). |
+| **Phase 8** | Panier frontend & WhatsApp | **Terminée** | `cart.js`, persistance `localStorage`, drawer fluide, conversion WhatsApp. |
+| **Phase 9** | Modèles & Supabase | **Terminée** | Modèles `Category`, `Product`, PostgreSQL Supabase, psycopg v3. |
+| **Phase 10** | Administration Django | **Terminée** | Admin complète avec inlines d'articles, filtres et sécurité. |
+| **Phase 11** | Historisation commandes | **Terminée** | Modèles `Order` & `OrderItem`, `/api/orders/`, fail-safe WhatsApp. |
+| **Phase 12** | Sécurité & Environnement | **Terminée** | Headers HTTP de sécurité, isolation `.env`, curseurs Supabase fixés. |
+| **Phase 13** | SEO & Métadonnées | **Terminée** | OpenGraph, Twitter Cards, Schema.org validé, `robots.txt`, `sitemap.xml`. |
+| **Phase 14** | Déploiement Vercel | **Terminée** | `vercel.json`, `build_files.sh`, WSGI serverless, WhiteNoise. |
 
 ---
 
-## 4. Fichiers importants de l\'arborescence
+## 8. Commandes Clés d'Exploitation
 
-`	ext
-Anime_Store/
-├── COMPTE_RENDU_PROJET.md    # Le présent document de référence
-├── manage.py                 # Point d'entrée Django
-├── package.json              # Scripts npm (build:css, watch:css)
-├── requirements.txt          # Dépendances Python (Django, whitenoise, python-dotenv, dj-database-url, psycopg)
-├── vercel.json               # Configuration de déploiement Vercel (WSGI + static build)
-├── build_files.sh            # Script de build Vercel (pip install, collectstatic, migrate)
-├── .env                      # Variables d'environnement locales (SECRET_KEY, DATABASE_URL, etc.)
-├── .gitattributes            # Normalisation des fins de ligne (LF pour scripts .sh)
-├── .editorconfig             # Configuration de l'éditeur
-├── db.sqlite3                # Base SQLite locale de fallback
-├── seed_product.py           # Script d'injection initiale des produits en base
-├── config/                   # Configuration principale Django
-│   ├── settings.py           # Settings (WhiteNoise, Supabase/dj_database_url, TEMPLATES, etc.)
-│   ├── urls.py               # URLs principales (shop + admin)
-│   └── wsgi.py               # Entrée WSGI avec alias app pour Vercel
-├── shop/                     # Application principale
-│   ├── admin.py              # Interface d'administration pour Category, Product, Order, OrderItem
-│   ├── models.py             # Modèles Django Category, Product, Order, OrderItem
-│   ├── migrations/           # Migrations Django appliquées (0001_initial.py, 0002_order_orderitem.py)
-│   ├── urls.py               # Définition des routes frontend et API (/api/orders/)
-│   └── views.py              # Vues dynamiques Django ORM et endpoint create_order
-├── static/
-│   ├── src/
-│   │   └── input.css         # Source CSS Tailwind v4 avec tokens, @theme et classes utilitaires
-│   ├── dist/
-│   │   └── output.css        # CSS compilé injecté dans base.html
-│   ├── images/products/      # Images réelles des produits (haoris, figurines, porte-clés)
-│   └── js/
-│       ├── main.js           # Dark mode, menu mobile, parallax fluide, FAQ accordéon
-│       └── cart.js           # Panier (localStorage, tiroir drawer, synchro API orders, WhatsApp, toasts)
-└── templates/
-    ├── base.html             # Layout principal (header avec badge panier, drawer panier, footer complet)
-    ├── home.html             # Homepage immersive
-    ├── catalog.html          # Catalogue de produits filtrable avec boutons d'ajout direct
-    ├── product.html          # Fiche produit avec sélecteur de quantité (+/-) et ajout panier
-    ├── about.html            # Page À propos
-    └── contact.html          # Page Contact & FAQ
-`
-
----
-
-## 5. Commandes PowerShell utiles
-
-Toutes les commandes se lancent depuis la racine du projet (D:\\Download\\Anime_Store) :
-
-`powershell
-# 1. Se placer dans le dossier
-cd D:\\Download\\Anime_Store
-
-# 2. Compiler Tailwind CSS (One-shot)
+```powershell
+# 1. Compiler les styles Tailwind v4
 npm run build:css
 
-# 3. Compiler Tailwind CSS en continu (Watcher)
-npm run watch:css
+# 2. Vérifier l'intégrité Django
+.\venv\Scripts\python.exe manage.py check
 
-# 4. Vérifier l'intégrité de Django
-.\\venv\\Scripts\\python.exe manage.py check
+# 3. Collecter les statiques WhiteNoise
+.\venv\Scripts\python.exe manage.py collectstatic --noinput
 
-# 5. Tester la collecte des statiques WhiteNoise
-.\\venv\\Scripts\\python.exe manage.py collectstatic --noinput
+# 4. Lancer le serveur local
+.\venv\Scripts\python.exe manage.py runserver
 
-# 6. Vérifier la syntaxe des scripts JavaScript
-node --check .\\static\\js\\main.js
-node --check .\\static\\js\\cart.js
-
-# 7. Lancer le serveur local Django
-.\\venv\\Scripts\\python.exe manage.py runserver
-
-# 8. Créer de nouvelles migrations / appliquer les migrations
-.\\venv\\Scripts\\python.exe manage.py makemigrations
-.\\venv\\Scripts\\python.exe manage.py migrate
-
-# 9. Re-peupler les produits et catégories en base si besoin
-.\\venv\\Scripts\\python.exe seed_product.py
-`
-
-URLs de test local :
-- **Accueil :** http://127.0.0.1:8000/
-- **Catalogue :** http://127.0.0.1:8000/boutique/
-- **Fiche produit exemple :** http://127.0.0.1:8000/boutique/figurine-naruto-hokage/
-- **À propos :** http://127.0.0.1:8000/a-propos/
-- **Contact & FAQ :** http://127.0.0.1:8000/contact/
-- **Administration Django :** http://127.0.0.1:8000/admin/
-
----
-
-## 6. État d\'avancement des phases
-
-| Phase | Intitulé | Statut | Détails |
-|---|---|---|---|
-| **Phase 0** | Cadrage et identité | **Terminée** | Palette #6491A6 / #1F2235, univers Otaku élégant. |
-| **Phase 1** | Initialisation Django | **Terminée** | Projet configuré, application shop, settings prêts. |
-| **Phase 2** | Design system Tailwind v4 | **Terminée** | input.css avec design tokens, mode sombre/clair, classes utilitaires. |
-| **Phase 3** | Layout global | **Terminée** | ase.html avec navigation responsive, footer, drawer panier, dark mode. |
-| **Phase 4** | Homepage | **Terminée** | home.html avec sections complètes, parallax natif, micro-interactions. |
-| **Phase 5** | Catalogue frontend | **Terminée** | catalog.html avec filtres recherche, catégorie, tri, stock et ajout panier. |
-| **Phase 6** | Fiche produit | **Terminée** | product.html avec sélecteur quantité, ajout panier, commande directe, suggestions. |
-| **Phase 7** | Pages secondaires | **Terminée** | bout.html et contact.html (liens réels WhatsApp/Instagram + FAQ accordéon). |
-| **Phase 8** | Panier frontend & WhatsApp | **Terminée** | Module cart.js, tiroir latéral animé, localStorage, badges, commande WhatsApp groupée. |
-| **Phase 9** | Modèles Django & Base de données | **Terminée** | Modèles Category et Product créés, migrés et peuplés sur PostgreSQL Supabase (23 produits, 4 catégories). |
-| **Phase 10** | Administration Django | **Terminée** | CategoryAdmin, ProductAdmin et OrderAdmin configurés, superuser ash opérationnel sur Supabase. |
-| **Phase 11** | Commandes & notifications WhatsApp | **Terminée** | Modèles Order et OrderItem, endpoint /api/orders/, historisation automatique lors du clic WhatsApp. |
-| **Phase 12** | Sécurité production | **Terminée** | Secrets dans .env, DEBUG configurable, ALLOWED_HOSTS, WhiteNoise pour les statiques, psycopg configuré. |
-| **Phase 13** | SEO & Métadonnées | **À faire (Prochaine priorité)** | Balises OpenGraph (titre, image de partage, description), Twitter Cards, balises meta canonical, robots.txt et sitemap.xml. |
-| **Phase 14** | Déploiement Vercel / Cloud | **Prête pour mise en ligne** | Fichiers ercel.json, uild_files.sh, 
-equirements.txt, .gitattributes en place. |
-
----
-
-## 7. Suite des phases à respecter
-
-### 🎯 Prochaine priorité : Phase 13 — SEO, Réseaux Sociaux & Métadonnées
-1. **Balises OpenGraph et Twitter Cards dans 	emplates/base.html :**
-   - og:title, og:description, og:image (visuel de partage WhatsApp / Facebook / Instagram), og:url.
-   - Permet d'avoir un aperçu élégant et professionnel quand on partage le lien du site sur WhatsApp ou les réseaux.
-2. **Métadonnées dynamiques par produit dans 	emplates/product.html :**
-   - Remplacer le titre et la description par le nom et l'image du produit spécifique lors du partage.
-3. **Fichiers 
-obots.txt et sitemap.xml :**
-   - Permettre l'indexation par Google et les moteurs de recherche.
-
-### 🎯 Étape suivante : Phase 14 — Déploiement final sur Vercel
-1. Pousser la branche sur GitHub.
-2. Connecter le dépôt sur Vercel.
-3. Configurer les variables d'environnement sur Vercel (SECRET_KEY, DEBUG=False, DATABASE_URL).
-4. Vérifier le déploiement en direct.
-
----
-
-## 8. Message court de reprise à copier-coller ailleurs
-
-> **Message de reprise de session :**
->
-> « Tu reprends le développement du projet Django **Anime Store Dakar**, situé localement dans D:\\Download\\Anime_Store.
->
-> **Contexte :** Boutique e-commerce vitrine pour le Sénégal (Dakar), univers Otaku/manga haut de gamme.
-> **Stack :** Django 5.2.17, Python 3.14.4 (.\\venv\\Scripts\\python.exe), Tailwind CSS v4.3.3, JS natif, PostgreSQL Supabase (avec fallback SQLite), WhiteNoise.
-> **État d'avancement :** Les Phases 1 à 12 et 14 sont terminées :
-> - Frontend complet et responsive avec Tailwind v4 et Vanilla JS.
-> - Panier client complet (static/js/cart.js) avec drawer latéral, localStorage et génération de commande WhatsApp.
-> - Backend Django ORM (shop/models.py, shop/views.py) : Category, Product, Order, OrderItem.
-> - Base de données PostgreSQL **Supabase** connectée, migrée et peuplée (23 produits, 4 catégories, superuser ash).
-> - API /api/orders/ pour enregistrer automatiquement chaque commande en base de données lors du clic de validation WhatsApp.
-> - Administration Django complète avec inlines d'articles commandés.
-> - Configuration de production et déploiement prête (ercel.json, uild_files.sh, 
-equirements.txt, WhiteNoise).
-> - Dépôt GitHub public synchronisé : https://github.com/SebAbba09/Anime_Store.
->
-> **Tâche prioritaire actuelle :** Passer à la **Phase 13 (SEO & Métadonnées OpenGraph)** :
-> 1. Ajouter les balises OpenGraph et Twitter Card dans ase.html et product.html pour des aperçus riches lors des partages sur WhatsApp et les réseaux sociaux.
-> 2. Mettre en place 
-obots.txt et le sitemap.xml.
-> 3. Lancer le premier déploiement Vercel.
->
-> **Rappel commandes de build & test :**
-> 
-pm run build:css ; .\\venv\\Scripts\\python.exe manage.py check ; .\\venv\\Scripts\\python.exe manage.py runserver
-> Ne pas toucher aux directives @theme dans static/src/input.css (Tailwind v4 fonctionne parfaitement). Consulte COMPTE_RENDU_PROJET.md pour tous les détails. »
+# 5. Déployer sur Vercel en production
+npx vercel --prod
+```
