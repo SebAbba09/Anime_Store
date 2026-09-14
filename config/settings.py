@@ -32,6 +32,10 @@ ALLOWED_HOSTS = [h.strip() for h in _allowed.split(",") if h.strip()]
 if "testserver" not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append("testserver")
 
+    RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+    if RENDER_EXTERNAL_HOSTNAME:
+        ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 # Autoriser les previews et le domaine de production Vercel
 if not DEBUG:
     if ".vercel.app" not in ALLOWED_HOSTS:
