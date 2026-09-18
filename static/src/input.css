@@ -2941,3 +2941,39 @@ html:not(.dark) .hero-v2__overlay--dark {
         transform: none !important;
     }
 }
+
+
+/* =========================================================================
+   ▓▓▓ PHASE 1 — QUICK WINS ▓▓▓
+   ========================================================================= */
+
+html:not(.dark) .hero-v2__overlay--light {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(31, 34, 53, 0.30) 0%,
+            rgba(31, 34, 53, 0.20) 18%,
+            rgba(31, 34, 53, 0.10) 45%,
+            rgba(31, 34, 53, 0.40) 72%,
+            rgba(31, 34, 53, 0.80) 100%
+        ),
+        radial-gradient(
+            120% 80% at 50% 30%,
+            rgba(31, 34, 53, 0.08) 0%,
+            rgba(31, 34, 53, 0.25) 100%
+        );
+}
+
+html:not(.dark) .hero-v2__title {
+    text-shadow:
+        0 4px 28px rgba(0, 0, 0, 0.65),
+        0 2px 10px rgba(0, 0, 0, 0.55),
+        0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+html:not(.dark) .hero-v2__eyebrow,
+html:not(.dark) .hero-v2__subtitle {
+    text-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.55),
+        0 1px 3px rgba(0, 0, 0, 0.45);
+}

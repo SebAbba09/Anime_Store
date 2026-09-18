@@ -44,7 +44,7 @@
             </h1>
 
             <p class="hero-v2__subtitle">
-                Une vitrine e-commerce moderne pour figurines, mangas, vêtements et accessoires, avec une expérience claire, mobile-first et assez premium pour inspirer confiance.
+                Figurines collector, mangas, vêtements et accessoires Otaku. Une boutique pensée pour les fans de Dakar, avec un service rapide et humain.
             </p>
 
             <div class="hero-v2__actions">
@@ -181,7 +181,7 @@
             </div>
 
             <p class="text-base leading-relaxed text-brand-dark/75 dark:text-white/70 sm:text-lg">
-                La page reprend une logique de boutique premium, des espaces respirants et une touche expressive contrôlée. L’objectif est de vendre l’univers Otaku avec sérieux, sans tomber dans un rendu trop chargé.
+                Nous sélectionnons chaque produit avec soin : figurines officielles, éditions collector et goodies introuvables à Dakar. Livraison rapide dans toute la ville.
             </p>
         </div>
     </section>
@@ -200,7 +200,7 @@
                         Catégories
                     </h2>
                     <p class="section-subtitle">
-                        Les grandes familles de produits seront connectées au backend plus tard.
+                        Explore nos univers préférés — chaque catégorie rassemble une sélection pensée pour toi.
                     </p>
                 </div>
 
@@ -255,7 +255,7 @@
                         Nouveaux arrivages
                     </h2>
                     <p class="section-subtitle">
-                        Découvre les derniers produits ajoutés à la boutique.
+                        Les coups de cœur du moment, disponibles tout de suite.
                     </p>
                 </div>
 
@@ -284,6 +284,7 @@
                                 <img src="{% static product.image %}" alt="{{ product.name }}" loading="lazy">
                                 {% else %}
                                 <span class="font-display text-5xl font-bold">{{ product.style }}</span>
+                                <span class="coverflow__placeholder-label">{{ product.category }}</span>
                                 {% endif %}
                             </div>
                             <div class="coverflow__info">
@@ -500,9 +501,9 @@
                 <h2 class="section-title">
                     Simple à parcourir, rapide à commander
                 </h2>
-                <p class="section-subtitle">
-                    La V1 reste volontairement directe : découvrir, comparer, ajouter au panier puis finaliser via WhatsApp.
-                </p>
+                    <p class="section-subtitle">
+                        Découvre, compare, et commande en quelques clics via WhatsApp. Simple, rapide, efficace.
+                    </p>
             </div>
 
             <div class="grid gap-4 sm:grid-cols-3">
@@ -546,9 +547,9 @@
                 <h2 class="section-title mt-5">
                     Une question sur un produit ?
                 </h2>
-                <p class="section-subtitle">
-                    Le parcours V1 gardera une commande simple : panier frontend, formulaire, puis contact WhatsApp.
-                </p>
+                    <p class="section-subtitle">
+                        Une question sur un produit ? Écris-nous sur WhatsApp, on te répond rapidement.
+                    </p>
                 <a href="#" class="btn btn-primary mt-8">
                     Contacter la boutique
                 </a>
